@@ -1,0 +1,22 @@
+﻿@model PopMS.ViewModel.userVMs.userVM
+@inject IStringLocalizer<WalkingTec.Mvvm.Core.Program> Localizer;
+
+<wt:form vm="@Model">
+    <wt:row items-per-row="ItemsPerRowEnum.Two">
+        <wt:combobox field="Entity.DCID" items="AllDCs" />
+        <wt:combobox field="Entity.DeptID" items="AllDepts" />
+        <wt:textbox field="Entity.ITCode" />
+        <wt:textbox field="Entity.Name" />
+        <wt:combobox field="Entity.Sex" />
+        <wt:textbox field="Entity.CellPhone" />
+        <wt:upload field="Entity.PhotoId" />
+        <wt:switch field="Entity.IsValid" />
+        <wt:checkbox field="SelectedUserRolesIDs" items="AllUserRoless" />
+        <wt:checkbox field="SelectedUserGroupsIDs" items="AllUserGroupss" />
+    </wt:row>
+    <wt:hidden field="Entity.ID" />
+    <wt:row align="AlignEnum.Right">
+        <wt:submitbutton />
+        <wt:closebutton />
+    </wt:row>
+</wt:form>

@@ -1,0 +1,15 @@
+﻿@model PopMS.ViewModel.BASE.area_locationVMs.area_locationVM
+@inject IStringLocalizer<WalkingTec.Mvvm.Core.Program> Localizer;
+
+<wt:form vm="@Model">
+<wt:row items-per-row="ItemsPerRowEnum.One">
+<wt:combobox field="Entity.AreaID" items="AllAreas"/>
+<wt:textbox field="Entity.Location" />
+<wt:combobox field="Entity.isMix" />
+</wt:row>
+    <wt:hidden field="Entity.ID" />
+    <wt:row align="AlignEnum.Right">
+        <wt:submitbutton />
+        <wt:closebutton />
+    </wt:row>
+</wt:form>

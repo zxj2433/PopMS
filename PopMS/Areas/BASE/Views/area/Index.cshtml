@@ -1,0 +1,9 @@
+﻿@model PopMS.ViewModel.BASE.areaVMs.areaListVM
+@inject IStringLocalizer<WalkingTec.Mvvm.Core.Program> Localizer;
+
+<wt:searchpanel vm="@Model" reset-btn="true">
+<wt:row items-per-row="ItemsPerRowEnum.Three">
+<wt:textbox field="Searcher.Area" />
+</wt:row>
+</wt:searchpanel>
+<wt:grid vm="@Model" url="/BASE/area/Search"/>

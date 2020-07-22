@@ -1,0 +1,15 @@
+﻿@model PopMS.ViewModel.CTT.contract_popVMs.contract_popVM
+@inject IStringLocalizer<WalkingTec.Mvvm.Core.Program> Localizer;
+
+<wt:form vm="@Model">
+    <wt:row items-per-row="ItemsPerRowEnum.Two">
+        <wt:display field="Entity.Contract.Name" />
+        <wt:display field="Entity.Pop.PopName" />
+        <wt:display field="Entity.UnitPack" />
+        <wt:display field="Entity.Cnt" />
+        <wt:display field="Entity.Price" />
+    </wt:row>
+    <wt:row align="AlignEnum.Right">
+        <wt:closebutton />
+    </wt:row>
+</wt:form>

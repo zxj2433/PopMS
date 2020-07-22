@@ -1,0 +1,17 @@
+﻿@model PopMS.ViewModel.Orders.order_popVMs.order_popVM
+@inject IStringLocalizer<WalkingTec.Mvvm.Core.Program> Localizer;
+
+    <wt:form vm="@Model" url="/Orders/order_pop/DoRecPop">
+
+        <wt:combobox field="Location" items="AllLocations" />
+        <wt:row items-per-row="ItemsPerRowEnum.Two">
+            <wt:textbox field="Entity.OrderQty" disabled="true"/>
+            <wt:textbox field="Entity.RecQty" disabled="true" />
+        </wt:row>
+        <wt:textbox field="RecQty" />
+        <wt:hidden field="Entity.ID" />
+        <wt:row align="AlignEnum.Right">
+            <wt:submitbutton />
+            <wt:closebutton />
+        </wt:row>
+    </wt:form>

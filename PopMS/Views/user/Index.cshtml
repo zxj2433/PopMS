@@ -1,0 +1,11 @@
+﻿@model PopMS.ViewModel.userVMs.userListVM
+@inject IStringLocalizer<WalkingTec.Mvvm.Core.Program> Localizer;
+
+<wt:searchpanel vm="@Model" reset-btn="true">
+<wt:row items-per-row="ItemsPerRowEnum.Three">
+<wt:combobox field="Searcher.DCID" items="Searcher.AllDCs" empty-text="@Localizer["All"]" />
+<wt:combobox field="Searcher.DeptID" items="Searcher.AllDepts" empty-text="@Localizer["All"]" />
+<wt:textbox field="Searcher.ITCode" />
+</wt:row>
+</wt:searchpanel>
+<wt:grid vm="@Model" url="/user/Search"/>

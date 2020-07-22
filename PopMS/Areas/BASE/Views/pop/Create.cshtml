@@ -1,0 +1,15 @@
+﻿@model PopMS.ViewModel.BASE.popVMs.popVM
+@inject IStringLocalizer<WalkingTec.Mvvm.Core.Program> Localizer;
+
+<wt:form vm="@Model">
+<wt:row items-per-row="ItemsPerRowEnum.One">
+    <wt:combobox field="Entity.DCID" items="AllDCs" />
+<wt:textbox field="Entity.PopNo" />
+<wt:textbox field="Entity.PopName" />
+<wt:textbox field="Entity.index" />
+</wt:row>
+    <wt:row align="AlignEnum.Right">
+        <wt:submitbutton />
+        <wt:closebutton />
+    </wt:row>
+</wt:form>

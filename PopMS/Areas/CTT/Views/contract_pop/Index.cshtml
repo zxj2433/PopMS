@@ -1,0 +1,10 @@
+﻿@model PopMS.ViewModel.CTT.contract_popVMs.contract_popListVM
+@inject IStringLocalizer<WalkingTec.Mvvm.Core.Program> Localizer;
+
+<wt:searchpanel vm="@Model" reset-btn="true">
+    <wt:row items-per-row="ItemsPerRowEnum.Three">
+        <wt:combobox field="Searcher.ContractID" items="Searcher.AllContracts" empty-text="@Localizer["All"]" />
+        <wt:combobox field="Searcher.PopID" items="Searcher.AllPops" empty-text="@Localizer["All"]" />
+    </wt:row>
+</wt:searchpanel>
+<wt:grid vm="@Model" url="/CTT/contract_pop/Search"/>

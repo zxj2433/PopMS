@@ -1,0 +1,17 @@
+﻿@model PopMS.ViewModel.CTT.contractVMs.contractVM
+@inject IStringLocalizer<WalkingTec.Mvvm.Core.Program> Localizer;
+
+    <wt:form vm="@Model">
+        <wt:row items-per-row="ItemsPerRowEnum.Two">
+            <wt:display field="Entity.DC.Name" />
+            <wt:display field="Entity.Name" />
+            <wt:display field="Entity.StartDate" />
+            <wt:display field="Entity.EndDate" />
+            <wt:display field="Entity.Vendor" />
+            <wt:display field="Entity.ContractFileID" />
+        </wt:row>
+        <wt:display field="Entity.Remark" />
+        <wt:row align="AlignEnum.Right">
+            <wt:closebutton />
+        </wt:row>
+    </wt:form>

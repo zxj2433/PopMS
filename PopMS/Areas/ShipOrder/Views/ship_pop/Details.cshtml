@@ -1,0 +1,12 @@
+﻿@model PopMS.ViewModel.ShipOrder.ship_popVMs.ship_popVM
+@inject IStringLocalizer<WalkingTec.Mvvm.Core.Program> Localizer;
+
+<wt:form vm="@Model">
+<wt:row items-per-row="ItemsPerRowEnum.Two">
+<wt:display field="Entity.Pop.PopName" />
+<wt:display field="Entity.OrderQty" />
+</wt:row>
+    <wt:row align="AlignEnum.Right">
+        <wt:closebutton />
+    </wt:row>
+</wt:form>
