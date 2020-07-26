@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PopMS.DataAccess.Migrations
 {
-    public partial class up202007221323 : Migration
+    public partial class initdb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -40,13 +40,31 @@ namespace PopMS.DataAccess.Migrations
                     CreateBy = table.Column<string>(maxLength: 50, nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: true),
                     UpdateBy = table.Column<string>(maxLength: 50, nullable: true),
-                    DcNo = table.Column<string>(maxLength: 50, nullable: true),
-                    Name = table.Column<string>(maxLength: 50, nullable: true),
+                    DcNo = table.Column<string>(maxLength: 50, nullable: false),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
                     Remark = table.Column<string>(maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_dcs", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "depts",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    CreateTime = table.Column<DateTime>(nullable: true),
+                    CreateBy = table.Column<string>(maxLength: 50, nullable: true),
+                    UpdateTime = table.Column<DateTime>(nullable: true),
+                    UpdateBy = table.Column<string>(maxLength: 50, nullable: true),
+                    DeptName = table.Column<string>(maxLength: 50, nullable: false),
+                    DeptRemark = table.Column<string>(maxLength: 50, nullable: true),
+                    Index = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_depts", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -167,7 +185,7 @@ namespace PopMS.DataAccess.Migrations
                     UpdateTime = table.Column<DateTime>(nullable: true),
                     UpdateBy = table.Column<string>(maxLength: 50, nullable: true),
                     DCID = table.Column<Guid>(nullable: false),
-                    Area = table.Column<string>(maxLength: 50, nullable: true),
+                    Area = table.Column<string>(maxLength: 50, nullable: false),
                     AreaRemark = table.Column<string>(maxLength: 50, nullable: true)
                 },
                 constraints: table =>
@@ -182,7 +200,7 @@ namespace PopMS.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "depts",
+                name: "pop_Groups",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(nullable: false),
@@ -191,40 +209,14 @@ namespace PopMS.DataAccess.Migrations
                     UpdateTime = table.Column<DateTime>(nullable: true),
                     UpdateBy = table.Column<string>(maxLength: 50, nullable: true),
                     DCID = table.Column<Guid>(nullable: false),
-                    DeptName = table.Column<string>(maxLength: 50, nullable: true),
-                    DeptRemark = table.Column<string>(maxLength: 50, nullable: true),
-                    Index = table.Column<int>(nullable: false)
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    Index = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_depts", x => x.ID);
+                    table.PrimaryKey("PK_pop_Groups", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_depts_dcs_DCID",
-                        column: x => x.DCID,
-                        principalTable: "dcs",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "pops",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(nullable: false),
-                    CreateTime = table.Column<DateTime>(nullable: true),
-                    CreateBy = table.Column<string>(maxLength: 50, nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: true),
-                    UpdateBy = table.Column<string>(maxLength: 50, nullable: true),
-                    DCID = table.Column<Guid>(nullable: false),
-                    PopNo = table.Column<string>(maxLength: 50, nullable: true),
-                    PopName = table.Column<string>(maxLength: 100, nullable: true),
-                    index = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_pops", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_pops_dcs_DCID",
+                        name: "FK_pop_Groups_dcs_DCID",
                         column: x => x.DCID,
                         principalTable: "dcs",
                         principalColumn: "ID",
@@ -237,6 +229,7 @@ namespace PopMS.DataAccess.Migrations
                 {
                     ID = table.Column<Guid>(nullable: false),
                     DCID = table.Column<Guid>(nullable: false),
+                    ContractID = table.Column<string>(nullable: true),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Vendor = table.Column<string>(maxLength: 50, nullable: false),
                     Remark = table.Column<string>(maxLength: 500, nullable: true),
@@ -244,7 +237,8 @@ namespace PopMS.DataAccess.Migrations
                     EndDate = table.Column<DateTime>(nullable: false),
                     ContractFileID = table.Column<Guid>(nullable: true),
                     UserCode = table.Column<string>(maxLength: 50, nullable: true),
-                    ImportTime = table.Column<DateTime>(nullable: false)
+                    ImportTime = table.Column<DateTime>(nullable: false),
+                    MaxCost = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -260,7 +254,54 @@ namespace PopMS.DataAccess.Migrations
                         column: x => x.DCID,
                         principalTable: "dcs",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FrameworkUsers",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    CreateTime = table.Column<DateTime>(nullable: true),
+                    CreateBy = table.Column<string>(maxLength: 50, nullable: true),
+                    UpdateTime = table.Column<DateTime>(nullable: true),
+                    UpdateBy = table.Column<string>(maxLength: 50, nullable: true),
+                    ITCode = table.Column<string>(maxLength: 50, nullable: false),
+                    Password = table.Column<string>(maxLength: 32, nullable: false),
+                    Email = table.Column<string>(maxLength: 50, nullable: true),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    Sex = table.Column<int>(nullable: true),
+                    CellPhone = table.Column<string>(nullable: true),
+                    HomePhone = table.Column<string>(maxLength: 30, nullable: true),
+                    Address = table.Column<string>(maxLength: 200, nullable: true),
+                    ZipCode = table.Column<string>(nullable: true),
+                    PhotoId = table.Column<Guid>(nullable: true),
+                    IsValid = table.Column<bool>(nullable: false),
+                    Discriminator = table.Column<string>(nullable: false),
+                    DCID = table.Column<Guid>(nullable: true),
+                    DeptID = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FrameworkUsers", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_FrameworkUsers_dcs_DCID",
+                        column: x => x.DCID,
+                        principalTable: "dcs",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FrameworkUsers_depts_DeptID",
+                        column: x => x.DeptID,
+                        principalTable: "depts",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FrameworkUsers_FileAttachments_PhotoId",
+                        column: x => x.PhotoId,
+                        principalTable: "FileAttachments",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -330,7 +371,7 @@ namespace PopMS.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FrameworkUsers",
+                name: "pops",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(nullable: false),
@@ -338,111 +379,18 @@ namespace PopMS.DataAccess.Migrations
                     CreateBy = table.Column<string>(maxLength: 50, nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: true),
                     UpdateBy = table.Column<string>(maxLength: 50, nullable: true),
-                    ITCode = table.Column<string>(maxLength: 50, nullable: false),
-                    Password = table.Column<string>(maxLength: 32, nullable: false),
-                    Email = table.Column<string>(maxLength: 50, nullable: true),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    Sex = table.Column<int>(nullable: true),
-                    CellPhone = table.Column<string>(nullable: true),
-                    HomePhone = table.Column<string>(maxLength: 30, nullable: true),
-                    Address = table.Column<string>(maxLength: 200, nullable: true),
-                    ZipCode = table.Column<string>(nullable: true),
-                    PhotoId = table.Column<Guid>(nullable: true),
-                    IsValid = table.Column<bool>(nullable: false),
-                    Discriminator = table.Column<string>(nullable: false),
-                    DeptID = table.Column<Guid>(maxLength: 20, nullable: true)
+                    GroupID = table.Column<Guid>(nullable: false),
+                    PopNo = table.Column<string>(maxLength: 50, nullable: false),
+                    PopName = table.Column<string>(maxLength: 100, nullable: false),
+                    index = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FrameworkUsers", x => x.ID);
+                    table.PrimaryKey("PK_pops", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_FrameworkUsers_depts_DeptID",
-                        column: x => x.DeptID,
-                        principalTable: "depts",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FrameworkUsers_FileAttachments_PhotoId",
-                        column: x => x.PhotoId,
-                        principalTable: "FileAttachments",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "contract_Pops",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(nullable: false),
-                    CreateTime = table.Column<DateTime>(nullable: true),
-                    CreateBy = table.Column<string>(maxLength: 50, nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: true),
-                    UpdateBy = table.Column<string>(maxLength: 50, nullable: true),
-                    PopID = table.Column<Guid>(nullable: false),
-                    UnitPack = table.Column<string>(maxLength: 50, nullable: false),
-                    Cnt = table.Column<int>(nullable: false),
-                    Price = table.Column<double>(nullable: false),
-                    ContractID = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_contract_Pops", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_contract_Pops_contracts_ContractID",
-                        column: x => x.ContractID,
-                        principalTable: "contracts",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_contract_Pops_pops_PopID",
-                        column: x => x.PopID,
-                        principalTable: "pops",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FunctionPrivileges",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(nullable: false),
-                    CreateTime = table.Column<DateTime>(nullable: true),
-                    CreateBy = table.Column<string>(maxLength: 50, nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: true),
-                    UpdateBy = table.Column<string>(maxLength: 50, nullable: true),
-                    RoleId = table.Column<Guid>(nullable: true),
-                    UserId = table.Column<Guid>(nullable: true),
-                    MenuItemId = table.Column<Guid>(nullable: false),
-                    Allowed = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FunctionPrivileges", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_FunctionPrivileges_FrameworkMenus_MenuItemId",
-                        column: x => x.MenuItemId,
-                        principalTable: "FrameworkMenus",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "inventories",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(nullable: false),
-                    LocationID = table.Column<Guid>(nullable: false),
-                    Stock = table.Column<int>(nullable: false),
-                    UserCode = table.Column<string>(maxLength: 50, nullable: true),
-                    PutTime = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_inventories", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_inventories_area_Locations_LocationID",
-                        column: x => x.LocationID,
-                        principalTable: "area_Locations",
+                        name: "FK_pops_pop_Groups_GroupID",
+                        column: x => x.GroupID,
+                        principalTable: "pop_Groups",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -569,6 +517,85 @@ namespace PopMS.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FunctionPrivileges",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    CreateTime = table.Column<DateTime>(nullable: true),
+                    CreateBy = table.Column<string>(maxLength: 50, nullable: true),
+                    UpdateTime = table.Column<DateTime>(nullable: true),
+                    UpdateBy = table.Column<string>(maxLength: 50, nullable: true),
+                    RoleId = table.Column<Guid>(nullable: true),
+                    UserId = table.Column<Guid>(nullable: true),
+                    MenuItemId = table.Column<Guid>(nullable: false),
+                    Allowed = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FunctionPrivileges", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_FunctionPrivileges_FrameworkMenus_MenuItemId",
+                        column: x => x.MenuItemId,
+                        principalTable: "FrameworkMenus",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "inventories",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    LocationID = table.Column<Guid>(nullable: false),
+                    Stock = table.Column<int>(nullable: false),
+                    UsedQty = table.Column<int>(nullable: false),
+                    PutUser = table.Column<string>(maxLength: 50, nullable: true),
+                    PutTime = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_inventories", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_inventories_area_Locations_LocationID",
+                        column: x => x.LocationID,
+                        principalTable: "area_Locations",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "contract_Pops",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    CreateTime = table.Column<DateTime>(nullable: true),
+                    CreateBy = table.Column<string>(maxLength: 50, nullable: true),
+                    UpdateTime = table.Column<DateTime>(nullable: true),
+                    UpdateBy = table.Column<string>(maxLength: 50, nullable: true),
+                    PopID = table.Column<Guid>(nullable: false),
+                    UnitPack = table.Column<string>(maxLength: 50, nullable: false),
+                    Cnt = table.Column<int>(nullable: false),
+                    Price = table.Column<double>(nullable: false),
+                    ContractID = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_contract_Pops", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_contract_Pops_contracts_ContractID",
+                        column: x => x.ContractID,
+                        principalTable: "contracts",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_contract_Pops_pops_PopID",
+                        column: x => x.PopID,
+                        principalTable: "pops",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ship_Pops",
                 columns: table => new
                 {
@@ -580,9 +607,12 @@ namespace PopMS.DataAccess.Migrations
                     UserID = table.Column<Guid>(nullable: false),
                     PopID = table.Column<Guid>(nullable: false),
                     OrderQty = table.Column<int>(nullable: false),
+                    AlcQty = table.Column<int>(nullable: false),
+                    ShipQty = table.Column<int>(nullable: false),
+                    EnableQty = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),
                     ShipUser = table.Column<string>(maxLength: 50, nullable: true),
-                    ShipTime = table.Column<DateTime>(nullable: false),
+                    ShipTime = table.Column<DateTime>(nullable: true),
                     Ship_Pop_SumID = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
@@ -609,6 +639,49 @@ namespace PopMS.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "inv_records",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    InvID = table.Column<Guid>(nullable: false),
+                    NewInvID = table.Column<Guid>(nullable: true),
+                    Type = table.Column<int>(nullable: false),
+                    FromLocID = table.Column<Guid>(nullable: true),
+                    ToLocID = table.Column<Guid>(nullable: true),
+                    Qty = table.Column<int>(nullable: false),
+                    UserName = table.Column<string>(nullable: true),
+                    UpdateTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_inv_records", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_inv_records_area_Locations_FromLocID",
+                        column: x => x.FromLocID,
+                        principalTable: "area_Locations",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_inv_records_inventories_InvID",
+                        column: x => x.InvID,
+                        principalTable: "inventories",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_inv_records_inventories_NewInvID",
+                        column: x => x.NewInvID,
+                        principalTable: "inventories",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_inv_records_area_Locations_ToLocID",
+                        column: x => x.ToLocID,
+                        principalTable: "area_Locations",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "order_Pops",
                 columns: table => new
                 {
@@ -624,7 +697,7 @@ namespace PopMS.DataAccess.Migrations
                     OrderQty = table.Column<int>(nullable: false),
                     RecQty = table.Column<int>(nullable: false),
                     RecUser = table.Column<string>(maxLength: 50, nullable: true),
-                    RecTime = table.Column<DateTime>(nullable: false)
+                    RecTime = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -647,7 +720,7 @@ namespace PopMS.DataAccess.Migrations
                     UpdateTime = table.Column<DateTime>(nullable: true),
                     UpdateBy = table.Column<string>(maxLength: 50, nullable: true),
                     InvID = table.Column<Guid>(nullable: false),
-                    spsumID = table.Column<Guid>(nullable: false),
+                    spID = table.Column<Guid>(nullable: false),
                     OutQty = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -660,11 +733,11 @@ namespace PopMS.DataAccess.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_inventoryouts_ship_Pop_Sums_spsumID",
-                        column: x => x.spsumID,
-                        principalTable: "ship_Pop_Sums",
+                        name: "FK_inventoryouts_ship_Pops_spID",
+                        column: x => x.spID,
+                        principalTable: "ship_Pops",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -678,8 +751,7 @@ namespace PopMS.DataAccess.Migrations
                     UpdateBy = table.Column<string>(maxLength: 50, nullable: true),
                     OrderPopID = table.Column<int>(nullable: false),
                     InvID = table.Column<Guid>(nullable: false),
-                    InQty = table.Column<int>(nullable: false),
-                    contract_popID = table.Column<Guid>(nullable: true)
+                    InQty = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -696,12 +768,6 @@ namespace PopMS.DataAccess.Migrations
                         principalTable: "order_Pops",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_inventoryIn_contract_Pops_contract_popID",
-                        column: x => x.contract_popID,
-                        principalTable: "contract_Pops",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -730,6 +796,13 @@ namespace PopMS.DataAccess.Migrations
                 column: "ContractFileID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_contracts_ContractID",
+                table: "contracts",
+                column: "ContractID",
+                unique: true,
+                filter: "[ContractID] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_contracts_DCID",
                 table: "contracts",
                 column: "DCID");
@@ -748,11 +821,6 @@ namespace PopMS.DataAccess.Migrations
                 name: "IX_DataPrivileges_UserId",
                 table: "DataPrivileges",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_depts_DCID",
-                table: "depts",
-                column: "DCID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FrameworkMenus_DomainId",
@@ -785,6 +853,11 @@ namespace PopMS.DataAccess.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_FrameworkUsers_DCID",
+                table: "FrameworkUsers",
+                column: "DCID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FrameworkUsers_DeptID",
                 table: "FrameworkUsers",
                 column: "DeptID");
@@ -806,6 +879,26 @@ namespace PopMS.DataAccess.Migrations
                 column: "MenuItemId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_inv_records_FromLocID",
+                table: "inv_records",
+                column: "FromLocID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_inv_records_InvID",
+                table: "inv_records",
+                column: "InvID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_inv_records_NewInvID",
+                table: "inv_records",
+                column: "NewInvID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_inv_records_ToLocID",
+                table: "inv_records",
+                column: "ToLocID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_inventories_LocationID",
                 table: "inventories",
                 column: "LocationID");
@@ -821,19 +914,14 @@ namespace PopMS.DataAccess.Migrations
                 column: "OrderPopID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_inventoryIn_contract_popID",
-                table: "inventoryIn",
-                column: "contract_popID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_inventoryouts_InvID",
                 table: "inventoryouts",
                 column: "InvID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_inventoryouts_spsumID",
+                name: "IX_inventoryouts_spID",
                 table: "inventoryouts",
-                column: "spsumID");
+                column: "spID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_order_Pops_ContractPopID",
@@ -841,9 +929,20 @@ namespace PopMS.DataAccess.Migrations
                 column: "ContractPopID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_pops_DCID",
-                table: "pops",
+                name: "IX_pop_Groups_DCID",
+                table: "pop_Groups",
                 column: "DCID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_pops_GroupID",
+                table: "pops",
+                column: "GroupID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_pops_PopNo",
+                table: "pops",
+                column: "PopNo",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_SearchConditions_UserId",
@@ -884,6 +983,9 @@ namespace PopMS.DataAccess.Migrations
                 name: "FunctionPrivileges");
 
             migrationBuilder.DropTable(
+                name: "inv_records");
+
+            migrationBuilder.DropTable(
                 name: "inventoryIn");
 
             migrationBuilder.DropTable(
@@ -894,9 +996,6 @@ namespace PopMS.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "SearchConditions");
-
-            migrationBuilder.DropTable(
-                name: "ship_Pops");
 
             migrationBuilder.DropTable(
                 name: "FrameworkGroups");
@@ -914,10 +1013,7 @@ namespace PopMS.DataAccess.Migrations
                 name: "inventories");
 
             migrationBuilder.DropTable(
-                name: "ship_Pop_Sums");
-
-            migrationBuilder.DropTable(
-                name: "FrameworkUsers");
+                name: "ship_Pops");
 
             migrationBuilder.DropTable(
                 name: "FrameworkDomains");
@@ -929,7 +1025,10 @@ namespace PopMS.DataAccess.Migrations
                 name: "area_Locations");
 
             migrationBuilder.DropTable(
-                name: "depts");
+                name: "ship_Pop_Sums");
+
+            migrationBuilder.DropTable(
+                name: "FrameworkUsers");
 
             migrationBuilder.DropTable(
                 name: "contracts");
@@ -941,7 +1040,13 @@ namespace PopMS.DataAccess.Migrations
                 name: "areas");
 
             migrationBuilder.DropTable(
+                name: "depts");
+
+            migrationBuilder.DropTable(
                 name: "FileAttachments");
+
+            migrationBuilder.DropTable(
+                name: "pop_Groups");
 
             migrationBuilder.DropTable(
                 name: "dcs");

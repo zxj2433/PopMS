@@ -27,11 +27,18 @@ namespace PopMS.DataAccess
         public DbSet<ship_pop> ship_Pops { get; set; }
         public DbSet<ship_pop_sum> ship_Pop_Sums { get; set; }
         public DbSet<user> users { get; set; }
+        public DbSet<inv_record> inv_records { get; set; }
+        public DbSet<pop_group> pop_Groups { get; set; }
         public DataContext(string cs, DBTypeEnum dbtype, string version=null)
              : base(cs, dbtype, version)
         {
         }
-
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<pop>(e => e.HasIndex("PopNo").IsUnique());
+            modelBuilder.Entity<contract>(e => e.HasIndex("ContractID").IsUnique());
+            base.OnModelCreating(modelBuilder);
+        }
     }
 
     /// <summary>

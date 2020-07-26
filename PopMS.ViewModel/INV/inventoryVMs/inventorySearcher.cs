@@ -18,11 +18,18 @@ namespace PopMS.ViewModel.INV.inventoryVMs
         public List<ComboSelectListItem> AllPops { get; set; }
         [Display(Name = "物料")]
         public Guid? PopID { get; set; }
+        [Display(Name ="日期")]
+        public DateRange Date { get; set; }
+        public List<ComboSelectListItem> AllGroups { get; set; }
+
+        [Display(Name = "物料类型")]
+        public Guid? GroupID { get; set; }
 
         protected override void InitVM()
         {
             AllLocations = DC.Set<area_location>().GetSelectListItems(LoginUserInfo?.DataPrivileges, null, y => y.Location);
             AllPops = DC.Set<pop>().GetSelectListItems(LoginUserInfo?.DataPrivileges, null, y => y.PopName);
+            AllGroups=DC.Set<pop_group>().GetSelectListItems(LoginUserInfo?.DataPrivileges, null, y => y.Name);
         }
 
     }

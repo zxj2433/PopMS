@@ -1,0 +1,11 @@
+﻿@model PopMS.ViewModel.INV.inv_recordVMs.inv_recordListVM
+@inject IStringLocalizer<WalkingTec.Mvvm.Core.Program> Localizer;
+
+<wt:searchpanel vm="@Model" reset-btn="true">
+<wt:row items-per-row="ItemsPerRowEnum.Three">
+<wt:combobox field="Searcher.Type" empty-text="@Localizer["All"]" />
+<wt:textbox field="Searcher.UserName" />
+<wt:datetime field="Searcher.UpdateTime" range="true" />
+</wt:row>
+</wt:searchpanel>
+<wt:grid vm="@Model" url="/INV/inv_record/Search"/>

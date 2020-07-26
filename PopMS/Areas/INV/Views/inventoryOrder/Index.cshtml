@@ -1,0 +1,9 @@
+﻿@model PopMS.ViewModel.INV.inventoryVMs.inventoryListVM_Order
+@inject IStringLocalizer<WalkingTec.Mvvm.Core.Program> Localizer;
+
+<wt:searchpanel vm="@Model" reset-btn="true">
+<wt:row items-per-row="ItemsPerRowEnum.Two">
+<wt:combobox field="Searcher.GroupID" items="Searcher.AllGroups" empty-text="@Localizer["All"]" />
+</wt:row>
+</wt:searchpanel>
+<wt:grid vm="@Model" url="/INV/inventoryOrder/Search" hidden-checkbox="true" hidden-grid-index="true"/>

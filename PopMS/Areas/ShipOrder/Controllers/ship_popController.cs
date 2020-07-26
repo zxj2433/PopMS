@@ -5,6 +5,9 @@ using WalkingTec.Mvvm.Core;
 using WalkingTec.Mvvm.Mvc;
 using WalkingTec.Mvvm.Core.Extensions;
 using PopMS.ViewModel.ShipOrder.ship_popVMs;
+using System.Runtime.InteropServices;
+using System.Linq;
+using PopMS.Model;
 
 namespace PopMS.Controllers
 {
@@ -17,6 +20,7 @@ namespace PopMS.Controllers
         public ActionResult Index()
         {
             var vm = CreateVM<ship_popListVM>();
+            vm.Searcher.Status = ShipStatus.NEW;
             return PartialView(vm);
         }
 
@@ -38,19 +42,25 @@ namespace PopMS.Controllers
 
         #region Create
         [ActionDescription("Create")]
-        public ActionResult Create()
+        public ActionResult Create(string id)
         {
             var vm = CreateVM<ship_popVM>();
+            Guid ID = Guid.Empty;
+            if(Guid.TryParse(id,out ID))
+            {
+                vm.Entity.PopID = ID;
+                vm.AllPops.Where(r => r.Value.Equals(ID)).FirstOrDefault().Selected = true;
+            }
             return PartialView(vm);
         }
 
         [HttpPost]
         [ActionDescription("Create")]
-        public ActionResult Create(ship_popVM vm)
+        public ActionResult DoCreate(ship_popVM vm)
         {
             if (!ModelState.IsValid)
             {
-                return PartialView(vm);
+                return PartialView("Create",vm);
             }
             else
             {
@@ -58,7 +68,7 @@ namespace PopMS.Controllers
                 if (!ModelState.IsValid)
                 {
                     vm.DoReInit();
-                    return PartialView(vm);
+                    return PartialView("Create",vm);
                 }
                 else
                 {
@@ -212,6 +222,18 @@ namespace PopMS.Controllers
         {
             return vm.GetExportData();
         }
-
+        [ActionDescription("物料发放")]
+        public IActionResult ShipPops(string[] IDs)
+        {
+            var vm = CreateVM<ship_popBatchVM>(Ids: IDs);
+            if(vm.ShipPop())
+            {
+                return FFResult().RefreshGrid().Alert("发放记录已更新");
+            }
+            else
+            {
+                return FFResult().Alert("发放失败，请联系管理员");
+            }
+        }
     }
 }

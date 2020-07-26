@@ -25,6 +25,7 @@ namespace PopMS.ViewModel.CTT.contractVMs
                 this.MakeStandardAction("contract", GridActionStandardTypesEnum.BatchDelete, Localizer["BatchDelete"],"CTT", dialogWidth: 800),
                 this.MakeStandardAction("contract", GridActionStandardTypesEnum.Import, Localizer["Import"],"CTT", dialogWidth: 800),
                 this.MakeStandardAction("contract", GridActionStandardTypesEnum.ExportExcel, Localizer["Export"],"CTT"),
+
             };
         }
 
@@ -32,11 +33,14 @@ namespace PopMS.ViewModel.CTT.contractVMs
         {
             return new List<GridColumn<contract_View>>{
                 this.MakeGridHeader(x => x.Name_view),
+                this.MakeGridHeader(x => x.ContractID),
                 this.MakeGridHeader(x => x.Name),
                 this.MakeGridHeader(x => x.Vendor),
                 this.MakeGridHeader(x => x.Remark),
                 this.MakeGridHeader(x => x.StartDate),
                 this.MakeGridHeader(x => x.EndDate),
+                this.MakeGridHeader(x => x.MaxCost),
+                this.MakeGridHeader(x => x.OrderCost),
                 this.MakeGridHeader(x => x.ImportTime),
                 this.MakeGridHeaderAction(width: 200)
             };
@@ -53,11 +57,16 @@ namespace PopMS.ViewModel.CTT.contractVMs
                 {
 				    ID = x.ID,
                     Name_view = x.DC.Name,
+                    ContractID=x.ContractID,
                     Name = x.Name,
                     Vendor = x.Vendor,
                     Remark = x.Remark,
                     StartDate = x.StartDate,
                     EndDate = x.EndDate,
+                    MaxCost=x.MaxCost,
+                    OrderCost=DC.Set<inventoryIn>()
+                    .Where(r=>r.OrderPop.ContractPop.ContractID==x.ID)
+                    .Sum(r=>r.OrderPop.ContractPop.Price*r.Inv.Stock),
                     ImportTime = x.ImportTime,
                 })
                 .OrderBy(x => x.ID);
@@ -69,6 +78,8 @@ namespace PopMS.ViewModel.CTT.contractVMs
     public class contract_View : contract{
         [Display(Name = "仓库名")]
         public String Name_view { get; set; }
+        [Display(Name = "已订货金额")]
+        public double OrderCost { get; set; }
 
     }
 }

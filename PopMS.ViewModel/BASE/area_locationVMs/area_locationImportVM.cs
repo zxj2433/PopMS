@@ -23,6 +23,7 @@ namespace PopMS.ViewModel.BASE.area_locationVMs
         {
             Area_Excel.DataType = ColumnDataType.ComboBox;
             Area_Excel.ListItems = DC.Set<area>().GetSelectListItems(LoginUserInfo?.DataPrivileges, null, y => y.Area);
+            FileDisplayName = "货位导入模板";
         }
 
     }

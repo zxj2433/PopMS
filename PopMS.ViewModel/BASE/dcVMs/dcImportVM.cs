@@ -21,6 +21,7 @@ namespace PopMS.ViewModel.BASE.dcVMs
 
 	    protected override void InitVM()
         {
+            FileDisplayName = "仓库导入模板";
         }
 
     }

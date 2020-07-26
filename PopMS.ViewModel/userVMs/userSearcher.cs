@@ -13,8 +13,10 @@ namespace PopMS.ViewModel.userVMs
     public partial class userSearcher : BaseSearcher
     {
         public List<ComboSelectListItem> AllDCs { get; set; }
+        [Display(Name ="仓库")]
         public Guid? DCID { get; set; }
         public List<ComboSelectListItem> AllDepts { get; set; }
+        [Display(Name = "部门")]
         public Guid? DeptID { get; set; }
         [Display(Name = "用户名")]
         public String ITCode { get; set; }

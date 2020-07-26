@@ -4,11 +4,13 @@
     <wt:form vm="@Model">
         <wt:row items-per-row="ItemsPerRowEnum.Two">
             <wt:combobox field="Entity.DCID" items="AllDCs" />
+            <wt:upload field="Entity.ContractFileID" />
+            <wt:textbox field="Entity.ContractID" />
             <wt:textbox field="Entity.Name" />
             <wt:datetime field="Entity.StartDate" />
             <wt:datetime field="Entity.EndDate" />
             <wt:textbox field="Entity.Vendor" />
-            <wt:upload field="Entity.ContractFileID" />
+            <wt:textbox field="Entity.MaxCost" />
         </wt:row>
         <wt:textbox field="Entity.Remark" />
         <wt:hidden field="Entity.ID" />

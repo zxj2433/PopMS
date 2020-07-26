@@ -37,13 +37,17 @@ namespace PopMS.Model
         [Display(Name = "申请物料")]
         public pop Pop { get; set; }
         [Display(Name = "申请物料")]
+        [Required]
         public Guid PopID { get; set; }
         [Display(Name = "申请数量")]
-        public int OrderQty { get; set; }
+        [Required]
+        public int? OrderQty { get; set; }
         [Display(Name = "分配数量")]
         public int AlcQty { get; set; }
         [Display(Name ="实发数量")]
         public int ShipQty { get; set; }
+        [Display(Name ="最大可用量")]
+        public int EnableQty { get; set; }
         [Display(Name = "状态")]
         public ShipStatus Status { get; set; }
         [Display(Name = "派发人")]

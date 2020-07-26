@@ -61,8 +61,7 @@ namespace PopMS.ViewModel.ShipOrder.ship_pop_sumVMs
                         .GroupBy(x => new {
                             x.sp.Ship_Pop_SumID,
                             x.sp.Ship_Pop_Sum.OrderDate,
-                            x.sp.Ship_Pop_Sum.OrderRemark
-                        ,
+                            x.sp.Ship_Pop_Sum.OrderRemark,
                             x.Inv.Location.Location,
                             x.sp.Pop.PopName
                         })

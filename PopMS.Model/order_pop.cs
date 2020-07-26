@@ -58,6 +58,6 @@ namespace PopMS.Model
         [StringLength(50)]
         public string RecUser { get; set; }
         [Display(Name = "收货时间")]
-        public DateTime RecTime { get; set; }
+        public DateTime? RecTime { get; set; }
     }
 }

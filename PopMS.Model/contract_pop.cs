@@ -11,7 +11,7 @@ namespace PopMS.Model
         public pop Pop { get; set; }
         [Display(Name ="物料名")]
         public Guid PopID { get; set; }
-        [Display(Name = "单位规格")]
+        [Display(Name = "单位类型")]
         [StringLength(50)]
         [Required]
         public string UnitPack { get; set; }
@@ -22,6 +22,7 @@ namespace PopMS.Model
         public double Price { get; set; }
         public contract Contract { get; set; }
         [Display(Name = "合同")]
-        public Guid ContractID { get; set; }
+        [Required]
+        public Guid? ContractID { get; set; }
     }
 }

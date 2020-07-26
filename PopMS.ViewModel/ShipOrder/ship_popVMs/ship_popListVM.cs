@@ -17,21 +17,24 @@ namespace PopMS.ViewModel.ShipOrder.ship_popVMs
         {
             return new List<GridAction>
             {
-                this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.Create, Localizer["Create"],"ShipOrder", dialogWidth: 800),
+                //this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.Create, Localizer["Create"],"ShipOrder", dialogWidth: 800),
                 this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.Edit, Localizer["Edit"],"ShipOrder", dialogWidth: 800),
                 this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.Delete, Localizer["Delete"], "ShipOrder",dialogWidth: 800),
-                this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.Details, Localizer["Details"],"ShipOrder", dialogWidth: 800),
-                this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.BatchEdit, Localizer["BatchEdit"],"ShipOrder", dialogWidth: 800),
-                this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.BatchDelete, Localizer["BatchDelete"],"ShipOrder", dialogWidth: 800),
-                this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.Import, Localizer["Import"],"ShipOrder", dialogWidth: 800),
-                this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.ExportExcel, Localizer["Export"],"ShipOrder"),
-                this.MakeAction("ship_pop_sum","Create","生成拣货","生成拣货单",GridActionParameterTypesEnum.MultiIds,"ShipOrder",dialogWidth:800).SetShowInRow(false).SetHideOnToolBar(false)
+                //this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.Details, Localizer["Details"],"ShipOrder", dialogWidth: 800),
+                //this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.BatchEdit, Localizer["BatchEdit"],"ShipOrder", dialogWidth: 800),
+                //this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.BatchDelete, Localizer["BatchDelete"],"ShipOrder", dialogWidth: 800),
+                //this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.Import, Localizer["Import"],"ShipOrder", dialogWidth: 800),
+                //this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.ExportExcel, Localizer["Export"],"ShipOrder"),
+                this.MakeAction("inventoryOrder","Index","申请物料","物料领用",GridActionParameterTypesEnum.NoId,"INV",dialogWidth:900,dialogHeight:600).SetShowInRow(false).SetHideOnToolBar(false),
+                this.MakeAction("ship_pop_sum","Create","生成拣货","生成拣货单",GridActionParameterTypesEnum.MultiIds,"ShipOrder",dialogWidth:800).SetShowInRow(false).SetHideOnToolBar(false),
+                this.MakeAction("ship_pop","ShipPops","发放物料","更新发放状态",GridActionParameterTypesEnum.MultiIds,"ShipOrder",dialogWidth:800).SetShowInRow(false).SetHideOnToolBar(false)
             };
         }
 
         protected override IEnumerable<IGridColumn<ship_pop_View>> InitGridHeader()
         {
             return new List<GridColumn<ship_pop_View>>{
+                this.MakeGridHeader(x => x.CreateTime),
                 this.MakeGridHeader(x => x.CodeAndName_view),
                 this.MakeGridHeader(x => x.PopName_view),
                 this.MakeGridHeader(x => x.OrderQty),
@@ -46,9 +49,10 @@ namespace PopMS.ViewModel.ShipOrder.ship_popVMs
         public override IOrderedQueryable<ship_pop_View> GetSearchQuery()
         {
             var query = DC.Set<ship_pop>()
+                .Include("Pop.Group")
                 .CheckEqual(Searcher.Status, x => x.Status)
                 .CheckEqual(Searcher.Ship_Pop_SumID, x => x.Ship_Pop_SumID)
-                .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.Pop.DCID)
+                .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.Pop.Group.DCID)
                 .Select(x => new ship_pop_View
                 {
 				    ID = x.ID,
@@ -57,7 +61,9 @@ namespace PopMS.ViewModel.ShipOrder.ship_popVMs
                     OrderQty = x.OrderQty,
                     Status = x.Status,
                     ShipUser = x.ShipUser,
-                    ShipTime = x.ShipTime
+                    ShipTime = x.ShipTime,
+                    CreateTime=x.CreateTime,
+                    OrderRemark_view=x.Ship_Pop_Sum.OrderRemark
                 })
                 .OrderBy(x => x.ID);
             var data = query.ToList();

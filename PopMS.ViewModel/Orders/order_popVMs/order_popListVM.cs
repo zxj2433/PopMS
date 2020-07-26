@@ -41,13 +41,17 @@ namespace PopMS.ViewModel.Orders.order_popVMs
                 this.MakeGridHeader(x => x.TotalCost),
                 this.MakeGridHeader(x => x.RecQty),
                 this.MakeGridHeader(x => x.RecCost),
-                this.MakeGridHeaderAction(width: 200)
+                this.MakeGridHeaderAction(width: 150)
             };
         }
 
         public override IOrderedQueryable<order_pop_View> GetSearchQuery()
         {
             var query = DC.Set<order_pop>()
+                .Include("ContractPop.Contract")
+                .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.ContractPop.Contract.DCID)
+                .CheckBetween(Searcher.OrderDate?.GetStartTime(),Searcher.OrderDate?.GetEndTime(),x=>x.CreateTime)
+                .CheckEqual(Searcher.ContractID,x=>x.ContractPop.ContractID)
                 .Select(x => new order_pop_View
                 {
 				    ID = x.ID,
@@ -61,7 +65,7 @@ namespace PopMS.ViewModel.Orders.order_popVMs
                     CreateBy=x.CreateBy,
                     CreateTime=x.CreateTime
                 })
-                .OrderBy(x => x.ID);
+                .OrderByDescending(x => x.CreateTime);
             return query;
         }
 

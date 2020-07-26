@@ -6,14 +6,8 @@
  </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200722041942_initdb.cs" />
-    <Compile Remove="Migrations\20200722041942_initdb.Designer.cs" />
-    <Compile Remove="Migrations\20200722042610_initdb.cs" />
-    <Compile Remove="Migrations\20200722042610_initdb.Designer.cs" />
-    <Compile Remove="Migrations\20200722051918_initdb.cs" />
-    <Compile Remove="Migrations\20200722051918_initdb.Designer.cs" />
-    <Compile Remove="Migrations\20200722074156_up202007221541.cs" />
-    <Compile Remove="Migrations\20200722074156_up202007221541.Designer.cs" />
+    <Compile Remove="Migrations\20200724094412_up202007241743.cs" />
+    <Compile Remove="Migrations\20200724094412_up202007241743.Designer.cs" />
   </ItemGroup>
 
 

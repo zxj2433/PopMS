@@ -17,6 +17,19 @@ namespace PopMS.ViewModel.ShipOrder.ship_popVMs
             ListVM = new ship_popListVM();
             LinkedVM = new ship_pop_BatchEdit();
         }
+        public bool ShipPop()
+        {
+            var pops = DC.Set<ship_pop>().Where(r => Ids.Select(x => Guid.Parse(x)).Contains(r.ID));
+            foreach (var item in pops)
+            {
+                item.Status = ShipStatus.FINISH;
+                item.ShipQty = item.AlcQty;
+                item.ShipUser = LoginUserInfo.ITCode + " | " + LoginUserInfo.Name;
+                item.ShipTime = DateTime.Now;
+            }
+            DC.Set<ship_pop>().UpdateRange(pops);
+            return DC.SaveChanges() > 0 ? true : false;
+        }
 
     }
 

@@ -9,7 +9,10 @@ namespace PopMS.Model
     public class contract:TopBasePoco
     {
         public dc DC { get; set; }
+        [Display(Name = "仓库")]
         public Guid DCID { get; set; }
+        [Display(Name = "合同编号")]
+        public string ContractID { get; set; }
         [Display(Name ="合同名")]
         [StringLength(50)]
         [Required]
@@ -34,5 +37,7 @@ namespace PopMS.Model
         public string UserCode { get; set; }
         [Display(Name ="导入日期")]
         public DateTime ImportTime { get; set; }
+        [Display(Name ="合同金额")]
+        public double MaxCost { get; set; }
     }
 }

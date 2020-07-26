@@ -19,6 +19,7 @@ namespace PopMS.ViewModel.BASE.areaVMs
 
 	    protected override void InitVM()
         {
+            FileDisplayName = "区域导入模板";
         }
 
     }

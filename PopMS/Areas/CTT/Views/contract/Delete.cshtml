@@ -5,11 +5,12 @@
         <wt:quote>@Model.Localizer["DeleteConfirm"]</wt:quote>
         <wt:row items-per-row="ItemsPerRowEnum.Two">
             <wt:display field="Entity.DC.Name" />
+            <wt:display field="Entity.ContractID" />
             <wt:display field="Entity.Name" />
             <wt:display field="Entity.StartDate" />
             <wt:display field="Entity.EndDate" />
             <wt:display field="Entity.Vendor" />
-            <wt:display field="Entity.ContractFileID" />
+            <wt:display field="Entity.MaxCost" />
         </wt:row>
         <wt:display field="Entity.Remark" />
         <wt:hidden field="Entity.ID" />

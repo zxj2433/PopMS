@@ -11,11 +11,12 @@ namespace PopMS.Model
     {
         [Display(Name="部门")]
         [StringLength(50)]
+        [Required]
         public string DeptName { get; set; }
         [Display(Name = "备注")]
         [StringLength(50)]
         public string DeptRemark { get; set; }
         [Display(Name = "序号")]
-        public int Index { get; set; }
+        public int? Index { get; set; }
     }
 }

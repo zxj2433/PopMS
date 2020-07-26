@@ -27,8 +27,8 @@ namespace PopMS.ViewModel.Orders.order_popVMs
         protected override void InitVM()
         {
             AllContractPops = DC.Set<contract_pop>()
-                .Include("Pop")
-                .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.Pop.DCID)
+                .Include("Contract")
+                .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.Contract.DCID)
                 .Select(r => new ComboSelectListItem
                 {
                     Value = r.ID,
@@ -63,6 +63,10 @@ namespace PopMS.ViewModel.Orders.order_popVMs
         }
         public bool DoRecPop()
         {
+            if(Location==null||Location==Guid.Empty)
+            {
+                MSD.AddModelError("NullLocation", "请选择上架货位");
+            }
             if(RecQty>(Entity.OrderQty-Entity.RecQty))
             {
                 MSD.AddModelError("QtyOver", "实收数量不能大于剩余可收货数量");
@@ -93,6 +97,8 @@ namespace PopMS.ViewModel.Orders.order_popVMs
             DC.AddEntity(InvIn);
             var OrderPop = DC.Set<order_pop>().Where(r => r.ID == Entity.ID).FirstOrDefault();
             OrderPop.RecQty += RecQty;
+            OrderPop.RecTime = DateTime.Now;
+            OrderPop.RecUser = LoginUserInfo.ITCode + " | " + LoginUserInfo.Name;
             DC.UpdateEntity(OrderPop);
             return DC.SaveChanges() > 0 ? true : false;
         }

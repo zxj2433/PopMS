@@ -20,6 +20,7 @@ namespace PopMS.ViewModel.BASE.deptVMs
 
 	    protected override void InitVM()
         {
+            FileDisplayName = "部门导入模板";
         }
 
     }

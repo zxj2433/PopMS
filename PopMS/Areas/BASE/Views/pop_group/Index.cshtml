@@ -1,0 +1,9 @@
+﻿@model PopMS.ViewModel.BASE.pop_groupVMs.pop_groupListVM
+@inject IStringLocalizer<WalkingTec.Mvvm.Core.Program> Localizer;
+
+<wt:searchpanel vm="@Model" reset-btn="true">
+<wt:row items-per-row="ItemsPerRowEnum.Three">
+<wt:combobox field="Searcher.DCID" items="Searcher.AllDCs" empty-text="@Localizer["All"]" />
+</wt:row>
+</wt:searchpanel>
+<wt:grid vm="@Model" url="/BASE/pop_group/Search"/>

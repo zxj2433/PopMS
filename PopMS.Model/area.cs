@@ -13,6 +13,7 @@ namespace PopMS.Model
         public Guid DCID { get; set; }
         [Display(Name ="区域")]
         [StringLength(50)]
+        [Required]
         public string Area { get; set; }
         [Display(Name ="备注")]
         [StringLength(50)]

@@ -17,14 +17,16 @@ namespace PopMS.ViewModel.INV.inventoryVMs
         {
             return new List<GridAction>
             {
-                this.MakeStandardAction("inventory", GridActionStandardTypesEnum.Create, Localizer["Create"],"INV", dialogWidth: 800),
-                this.MakeStandardAction("inventory", GridActionStandardTypesEnum.Edit, Localizer["Edit"],"INV", dialogWidth: 800),
-                this.MakeStandardAction("inventory", GridActionStandardTypesEnum.Delete, Localizer["Delete"], "INV",dialogWidth: 800),
-                this.MakeStandardAction("inventory", GridActionStandardTypesEnum.Details, Localizer["Details"],"INV", dialogWidth: 800),
-                this.MakeStandardAction("inventory", GridActionStandardTypesEnum.BatchEdit, Localizer["BatchEdit"],"INV", dialogWidth: 800),
-                this.MakeStandardAction("inventory", GridActionStandardTypesEnum.BatchDelete, Localizer["BatchDelete"],"INV", dialogWidth: 800),
-                this.MakeStandardAction("inventory", GridActionStandardTypesEnum.Import, Localizer["Import"],"INV", dialogWidth: 800),
+                //this.MakeStandardAction("inventory", GridActionStandardTypesEnum.Create, Localizer["Create"],"INV", dialogWidth: 800),
+                //this.MakeStandardAction("inventory", GridActionStandardTypesEnum.Edit, Localizer["Edit"],"INV", dialogWidth: 800),
+                //this.MakeStandardAction("inventory", GridActionStandardTypesEnum.Delete, Localizer["Delete"], "INV",dialogWidth: 800),
+                //this.MakeStandardAction("inventory", GridActionStandardTypesEnum.Details, Localizer["Details"],"INV", dialogWidth: 800),
+                //this.MakeStandardAction("inventory", GridActionStandardTypesEnum.BatchEdit, Localizer["BatchEdit"],"INV", dialogWidth: 800),
+                //this.MakeStandardAction("inventory", GridActionStandardTypesEnum.BatchDelete, Localizer["BatchDelete"],"INV", dialogWidth: 800),
+                //this.MakeStandardAction("inventory", GridActionStandardTypesEnum.Import, Localizer["Import"],"INV", dialogWidth: 800),
                 this.MakeStandardAction("inventory", GridActionStandardTypesEnum.ExportExcel, Localizer["Export"],"INV"),
+                this.MakeAction("inv_record","Create","修改","库存操作",GridActionParameterTypesEnum.SingleId,"INV",dialogWidth:800).SetShowInRow(true).SetHideOnToolBar(true),
+                this.MakeAction("inv_record","BatchEdit","批量转移","库存批量转移",GridActionParameterTypesEnum.MultiIds,"INV",dialogWidth:800).SetShowInRow(false).SetHideOnToolBar(false),
             };
         }
 
@@ -43,7 +45,7 @@ namespace PopMS.ViewModel.INV.inventoryVMs
                 this.MakeGridHeader(x => x.PutUser),
                 this.MakeGridHeader(x => x.PutTime),
                 this.MakeGridHeader(x => x.OutDate),
-                this.MakeGridHeaderAction(width: 200)
+                this.MakeGridHeaderAction(width: 100)
             };
         }
 
@@ -57,17 +59,18 @@ namespace PopMS.ViewModel.INV.inventoryVMs
                     ID = x.Inv.ID,
                     Location_view = x.Inv.Location.Location,
                     PopName = x.OrderPop.ContractPop.Pop.PopName,
-                    OutDate = x.Inv.InvOut.Max(r => r.CreateTime).Value.ToString("yyyy-MM-dd"),
+                    OutDate = x.Inv.InvOut.Max(r => r.CreateTime),
                     Stock = x.Inv.Stock,
-                    UsedQty = x.Inv.UsedQty,
+                    UsedQty = x.Inv.InvOut.Sum(r=>r.sp.AlcQty),
                     PutUser = x.Inv.PutUser,
                     PutTime = x.Inv.PutTime,
                     Pack = x.OrderPop.ContractPop.UnitPack,
                     Cnt = x.OrderPop.ContractPop.Cnt,
                     Price = x.OrderPop.ContractPop.Price,
-
+                    TotalPrice= x.OrderPop.ContractPop.Price * x.Inv.Stock,
+                    UsedPrice= x.OrderPop.ContractPop.Price *x.Inv.InvOut.Sum(r=>r.sp.AlcQty)
                 })
-                .OrderBy(x => x.ID);
+                .OrderBy(x => x.PopName);
             return query;
         }
 
@@ -80,7 +83,7 @@ namespace PopMS.ViewModel.INV.inventoryVMs
         [Display(Name = "批次")]
         public String Lot_view { get; set; }
         [Display(Name = "最后一次出库日期")]
-        public string OutDate { get; set; }
+        public DateTime? OutDate { get; set; }
         [Display(Name = "物料")]
         public string PopName { get; set; }
         [Display(Name = "可用数量")]
@@ -98,20 +101,21 @@ namespace PopMS.ViewModel.INV.inventoryVMs
         [Display(Name = "单价")]
         public double Price { get; set; }
         [Display(Name = "总资产")]
-        public string TotalPrice
-        {
+        public double TotalPrice { get; set; }
+        [Display(Name = "使用资产")]
+        public double UsedPrice { get; set; }
+        [Display(Name = "可用资产")]
+        public double EnablePrice {
             get
             {
-                return (Price * Stock).ToString("0.00");
+                return TotalPrice - UsedPrice;
             }
         }
-        [Display(Name = "剩余资产")]
-        public string EnablePrice
-        {
-            get
-            {
-                return (Price * EnableQty).ToString("0.00");
-            }
-        }
+        [Display(Name ="最近入库时间")]
+        public DateTime? InDate { get; set; }
+        [Display(Name ="已订数量")]
+        public int OrderQty { get; set; }
+        [Display(Name = "在途数量")]
+        public int OnHandQty { get; set; }
     }
 }

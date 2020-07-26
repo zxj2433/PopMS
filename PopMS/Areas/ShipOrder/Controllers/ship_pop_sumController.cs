@@ -19,6 +19,7 @@ namespace PopMS.Controllers
         public ActionResult Index()
         {
             var vm = CreateVM<ship_pop_sumListVM>();
+            vm.Searcher.Status = ShipStatus.ING;
             return PartialView(vm);
         }
 

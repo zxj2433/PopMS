@@ -31,15 +31,15 @@ namespace PopMS.Controllers
         [HttpPost]
         public async Task<ActionResult> Login(LoginVM vm)
         {
-            if (ConfigInfo.IsQuickDebug == false)
-            {
-                var verifyCode = HttpContext.Session.Get<string>("verify_code");
-                if (string.IsNullOrEmpty(verifyCode) || verifyCode.ToLower() != vm.VerifyCode.ToLower())
-                {
-                    vm.MSD.AddModelError("", Localizer["Login.ValidationFail"]);
-                    return View(vm);
-                }
-            }
+            //if (ConfigInfo.IsQuickDebug == false)
+            //{
+            //    var verifyCode = HttpContext.Session.Get<string>("verify_code");
+            //    if (string.IsNullOrEmpty(verifyCode) || verifyCode.ToLower() != vm.VerifyCode.ToLower())
+            //    {
+            //        vm.MSD.AddModelError("", Localizer["Login.ValidationFail"]);
+            //        return View(vm);
+            //    }
+            //}
 
             var user = vm.DoLogin();
             if (user == null)
@@ -56,7 +56,7 @@ namespace PopMS.Controllers
                 }
                 else
                 {
-                    url = "/";
+                    url = "/#/INV/inventorySum/Index";
                 }
 
                 AuthenticationProperties properties = null;

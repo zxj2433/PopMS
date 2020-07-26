@@ -1,0 +1,35 @@
+﻿@model PopMS.ViewModel.INV.inv_recordVMs.inv_recordVM
+@inject IStringLocalizer<WalkingTec.Mvvm.Core.Program> Localizer;
+
+    <wt:form vm="@Model">
+        <wt:hidden field="Entity.InvID" />
+        <wt:combobox field="Entity.Type" change-func="LocFocus()" />
+
+        <div id="InvRecordTsfLoc" hidden>
+            <wt:combobox field="Entity.ToLocID" items="AllToLocs" />
+        </div>
+        <wt:row items-per-row="ItemsPerRowEnum.Four">
+            <wt:display field="Entity.Inv.Stock" />
+            <wt:display field="UsedQty" />
+            <wt:display field="AlcQty" />
+            <wt:display field="EnableQty" />
+        </wt:row>
+        <wt:textbox field="Entity.Qty" />
+        <wt:row align="AlignEnum.Right">
+            <wt:submitbutton />
+            <wt:closebutton />
+        </wt:row>
+    </wt:form>
+<script>
+    function LocFocus() {
+        var type = $("#inv_recordVM_Entity_Type").val();
+        if (type == 1) {
+            $("#InvRecordTsfLoc").show();
+        } else {
+            $("#InvRecordTsfLoc").hide();
+            if (type == 0) {
+                $("#inv_recordVM_Entity_Qty").select().focus();
+            }
+        }
+    }
+</script>

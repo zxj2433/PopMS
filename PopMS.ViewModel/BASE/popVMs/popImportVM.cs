@@ -12,6 +12,8 @@ namespace PopMS.ViewModel.BASE.popVMs
 {
     public partial class popTemplateVM : BaseTemplateVM
     {
+        [Display(Name = "物料类型")]
+        public ExcelPropety PopGroup_Excel = ExcelPropety.CreateProperty<pop>(x => x.GroupID);
         [Display(Name = "物料编号")]
         public ExcelPropety PopNo_Excel = ExcelPropety.CreateProperty<pop>(x => x.PopNo);
         [Display(Name = "物料名称")]
@@ -21,6 +23,9 @@ namespace PopMS.ViewModel.BASE.popVMs
 
 	    protected override void InitVM()
         {
+            PopGroup_Excel.DataType = ColumnDataType.ComboBox;
+            PopGroup_Excel.ListItems = DC.Set<pop_group>().GetSelectListItems(LoginUserInfo?.DataPrivileges, null, y => y.Name);
+            FileDisplayName = "物料导入模板";
         }
 
     }

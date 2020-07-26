@@ -16,7 +16,7 @@
   <script src="/layui/layui.js"></script>
   <script src="/_js/framework_layui.js?time=@DateTime.Now.Ticks"></script>
   <link rel="stylesheet" href="~/sitecss/logincss.css">
-  <title>WTM</title>
+  <title>屈臣氏物料管理系统</title>
   <script type="text/javascript">
     $(document).ready(function () {
       $('#verify_code_img').attr('src', '/_framework/GetVerifyCode?id=' + Math.random());
@@ -46,14 +46,14 @@
           <i style="width: 16px;"><img src="~/images/icon-login01.png" /></i>
           <input type="password" name="Password" placeholder="@Model.Localizer["Login.InputPassword"]" class="login-input" value="@Model.Password">
         </li>
-        <li>
+        @*<li>
           <i><img src="~/images/icon-login03.png" /></i>
           <input type="text" name="VerifyCode" placeholder="@Model.Localizer["Login.InputValidation"]" class="login-input">
           <p class="login-code">
           </p>
           <img class="login-codeImg" id="verify_code_img">
           <i class="login-code"><img src="~/images/icon-login02.png" onclick="verify()" /></i>
-        </li>
+        </li>*@
         <li style="text-align:right;vertical-align:text-top">
           <input type="checkbox" name="RememberLogin" value="true" @(Model.RememberLogin ? "checked" : "")>
           <span style="font-size:14px; margin-left:5px;">@Model.Localizer["Login.RememberMe"]</span>

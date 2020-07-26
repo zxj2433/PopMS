@@ -20,7 +20,7 @@ namespace PopMS.Controllers
         [AllRights]
         public IActionResult Index()
         {
-            ViewData["title"] = "WTM";
+            ViewData["title"] = "屈臣氏物料管理系统";
             return View();
         }
 

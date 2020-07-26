@@ -1,0 +1,16 @@
+﻿@model PopMS.ViewModel.INV.inv_recordVMs.inv_recordVM
+@inject IStringLocalizer<WalkingTec.Mvvm.Core.Program> Localizer;
+
+<wt:form vm="@Model">
+<wt:row items-per-row="ItemsPerRowEnum.Two">
+<wt:display field="Entity.Inv.Location.Location" />
+<wt:display field="Entity.Type" />
+<wt:display field="Entity.ToLoc.Location" />
+<wt:display field="Entity.Qty" />
+<wt:display field="Entity.UserName" />
+<wt:display field="Entity.UpdateTime" />
+</wt:row>
+    <wt:row align="AlignEnum.Right">
+        <wt:closebutton />
+    </wt:row>
+</wt:form>

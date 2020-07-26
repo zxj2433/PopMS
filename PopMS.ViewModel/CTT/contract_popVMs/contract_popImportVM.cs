@@ -27,6 +27,7 @@ namespace PopMS.ViewModel.CTT.contract_popVMs
             Pop_Excel.ListItems = DC.Set<pop>().GetSelectListItems(LoginUserInfo?.DataPrivileges, null, y => y.PopName);
             Contract_Excel.DataType = ColumnDataType.ComboBox;
             Contract_Excel.ListItems = DC.Set<contract>().GetSelectListItems(LoginUserInfo?.DataPrivileges, null, y => y.Name);
+            FileDisplayName = "合同物料报价导入模板";
         }
 
     }

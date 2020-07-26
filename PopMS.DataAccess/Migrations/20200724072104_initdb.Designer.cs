@@ -10,8 +10,8 @@ using PopMS.DataAccess;
 namespace PopMS.DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200722052327_up202007221323")]
-    partial class up202007221323
+    [Migration("20200724072104_initdb")]
+    partial class initdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,6 +28,7 @@ namespace PopMS.DataAccess.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Area")
+                        .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
@@ -108,6 +109,9 @@ namespace PopMS.DataAccess.Migrations
                     b.Property<Guid?>("ContractFileID")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("ContractID")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<Guid>("DCID")
                         .HasColumnType("uniqueidentifier");
 
@@ -116,6 +120,9 @@ namespace PopMS.DataAccess.Migrations
 
                     b.Property<DateTime>("ImportTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<double>("MaxCost")
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -142,6 +149,10 @@ namespace PopMS.DataAccess.Migrations
 
                     b.HasIndex("ContractFileID");
 
+                    b.HasIndex("ContractID")
+                        .IsUnique()
+                        .HasFilter("[ContractID] IS NOT NULL");
+
                     b.HasIndex("DCID");
 
                     b.ToTable("contracts");
@@ -156,7 +167,8 @@ namespace PopMS.DataAccess.Migrations
                     b.Property<int>("Cnt")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("ContractID")
+                    b.Property<Guid?>("ContractID")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CreateBy")
@@ -207,10 +219,12 @@ namespace PopMS.DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DcNo")
+                        .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
@@ -243,10 +257,8 @@ namespace PopMS.DataAccess.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("DCID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("DeptName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
@@ -254,7 +266,7 @@ namespace PopMS.DataAccess.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("Index")
+                    b.Property<int?>("Index")
                         .HasColumnType("int");
 
                     b.Property<string>("UpdateBy")
@@ -266,9 +278,50 @@ namespace PopMS.DataAccess.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("DCID");
-
                     b.ToTable("depts");
+                });
+
+            modelBuilder.Entity("PopMS.Model.inv_record", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("FromLocID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("InvID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("NewInvID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Qty")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("ToLocID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("FromLocID");
+
+                    b.HasIndex("InvID");
+
+                    b.HasIndex("NewInvID");
+
+                    b.HasIndex("ToLocID");
+
+                    b.ToTable("inv_records");
                 });
 
             modelBuilder.Entity("PopMS.Model.inventory", b =>
@@ -283,12 +336,15 @@ namespace PopMS.DataAccess.Migrations
                     b.Property<DateTime?>("PutTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("PutUser")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
                     b.Property<int>("Stock")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserCode")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                    b.Property<int>("UsedQty")
+                        .HasColumnType("int");
 
                     b.HasKey("ID");
 
@@ -326,16 +382,11 @@ namespace PopMS.DataAccess.Migrations
                     b.Property<DateTime?>("UpdateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("contract_popID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("ID");
 
                     b.HasIndex("InvID");
 
                     b.HasIndex("OrderPopID");
-
-                    b.HasIndex("contract_popID");
 
                     b.ToTable("inventoryIn");
                 });
@@ -366,14 +417,14 @@ namespace PopMS.DataAccess.Migrations
                     b.Property<DateTime?>("UpdateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("spsumID")
+                    b.Property<Guid>("spID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
 
                     b.HasIndex("InvID");
 
-                    b.HasIndex("spsumID");
+                    b.HasIndex("spID");
 
                     b.ToTable("inventoryouts");
                 });
@@ -401,7 +452,7 @@ namespace PopMS.DataAccess.Migrations
                     b.Property<int>("RecQty")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("RecTime")
+                    b.Property<DateTime?>("RecTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("RecUser")
@@ -441,14 +492,16 @@ namespace PopMS.DataAccess.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("DCID")
+                    b.Property<Guid>("GroupID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PopName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<string>("PopNo")
+                        .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
@@ -459,17 +512,20 @@ namespace PopMS.DataAccess.Migrations
                     b.Property<DateTime?>("UpdateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("index")
+                    b.Property<int?>("index")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("DCID");
+                    b.HasIndex("GroupID");
+
+                    b.HasIndex("PopNo")
+                        .IsUnique();
 
                     b.ToTable("pops");
                 });
 
-            modelBuilder.Entity("PopMS.Model.ship_pop", b =>
+            modelBuilder.Entity("PopMS.Model.pop_group", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
@@ -482,13 +538,61 @@ namespace PopMS.DataAccess.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OrderQty")
+                    b.Property<Guid>("DCID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("Index")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("UpdateBy")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime?>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("DCID");
+
+                    b.ToTable("pop_Groups");
+                });
+
+            modelBuilder.Entity("PopMS.Model.ship_pop", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AlcQty")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime?>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EnableQty")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OrderQty")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<Guid>("PopID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("ShipTime")
+                    b.Property<int>("ShipQty")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ShipTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ShipUser")
@@ -1160,10 +1264,15 @@ namespace PopMS.DataAccess.Migrations
                 {
                     b.HasBaseType("WalkingTec.Mvvm.Core.FrameworkUserBase");
 
+                    b.Property<Guid?>("DCID")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("DeptID")
                         .IsRequired()
-                        .HasColumnType("uniqueidentifier")
-                        .HasMaxLength(20);
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("DCID");
 
                     b.HasIndex("DeptID");
 
@@ -1218,13 +1327,25 @@ namespace PopMS.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PopMS.Model.dept", b =>
+            modelBuilder.Entity("PopMS.Model.inv_record", b =>
                 {
-                    b.HasOne("PopMS.Model.dc", "DC")
+                    b.HasOne("PopMS.Model.area_location", "FromLoc")
                         .WithMany()
-                        .HasForeignKey("DCID")
+                        .HasForeignKey("FromLocID");
+
+                    b.HasOne("PopMS.Model.inventory", "Inv")
+                        .WithMany()
+                        .HasForeignKey("InvID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("PopMS.Model.inventory", "NewInv")
+                        .WithMany()
+                        .HasForeignKey("NewInvID");
+
+                    b.HasOne("PopMS.Model.area_location", "ToLoc")
+                        .WithMany()
+                        .HasForeignKey("ToLocID");
                 });
 
             modelBuilder.Entity("PopMS.Model.inventory", b =>
@@ -1249,10 +1370,6 @@ namespace PopMS.DataAccess.Migrations
                         .HasForeignKey("OrderPopID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("PopMS.Model.contract_pop", null)
-                        .WithMany("InvIn")
-                        .HasForeignKey("contract_popID");
                 });
 
             modelBuilder.Entity("PopMS.Model.inventoryout", b =>
@@ -1263,9 +1380,9 @@ namespace PopMS.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PopMS.Model.ship_pop_sum", "spsum")
+                    b.HasOne("PopMS.Model.ship_pop", "sp")
                         .WithMany("ShipIn")
-                        .HasForeignKey("spsumID")
+                        .HasForeignKey("spID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1280,6 +1397,15 @@ namespace PopMS.DataAccess.Migrations
                 });
 
             modelBuilder.Entity("PopMS.Model.pop", b =>
+                {
+                    b.HasOne("PopMS.Model.pop_group", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PopMS.Model.pop_group", b =>
                 {
                     b.HasOne("PopMS.Model.dc", "DC")
                         .WithMany()
@@ -1392,6 +1518,12 @@ namespace PopMS.DataAccess.Migrations
 
             modelBuilder.Entity("PopMS.Model.user", b =>
                 {
+                    b.HasOne("PopMS.Model.dc", "DC")
+                        .WithMany()
+                        .HasForeignKey("DCID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PopMS.Model.dept", "Dept")
                         .WithMany()
                         .HasForeignKey("DeptID")

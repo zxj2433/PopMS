@@ -37,6 +37,8 @@ namespace PopMS.ViewModel.CTT.contract_popVMs
                 this.MakeGridHeader(x => x.UnitPack),
                 this.MakeGridHeader(x => x.Cnt),
                 this.MakeGridHeader(x => x.Price),
+                this.MakeGridHeader(x => x.OrderedQty),
+                this.MakeGridHeader(x => x.ShippedQty),
                 this.MakeGridHeaderAction(width: 200)
             };
         }
@@ -54,6 +56,8 @@ namespace PopMS.ViewModel.CTT.contract_popVMs
                     Cnt = x.Cnt,
                     Price = x.Price,
                     Name_view = x.Contract.Name,
+                    OrderedQty=DC.Set<order_pop>().Where(r=>r.ContractPopID==x.ID).Sum(r=>r.OrderQty),
+                    ShippedQty=DC.Set<inventoryout>().Where(r=>r.Inv.InvIn.First().OrderPop.ContractPopID==x.ID).Sum(r=>r.sp.AlcQty)
                 })
                 .OrderBy(x => x.ID);
             return query;
@@ -66,6 +70,9 @@ namespace PopMS.ViewModel.CTT.contract_popVMs
         public String PopName_view { get; set; }
         [Display(Name = "合同名")]
         public String Name_view { get; set; }
-
+        [Display(Name = "订货总数量")]
+        public int OrderedQty { get; set; }
+        [Display(Name = "已发放数量")]
+        public int ShippedQty { get; set; }
     }
 }

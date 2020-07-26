@@ -36,7 +36,7 @@ namespace PopMS.ViewModel.ShipOrder.ship_pop_sumVMs
                 {
                     if(item.OrderQty>item.AlcQty)
                     {
-                        int AlcQty = Math.Min(inv.Stock - inv.UsedQty, item.OrderQty - item.AlcQty);
+                        int AlcQty = Math.Min(inv.Stock - inv.UsedQty, item.OrderQty.Value - item.AlcQty);
                         inv.UsedQty += AlcQty;
                         item.AlcQty += AlcQty;
                         inventoryout InvOut = new inventoryout

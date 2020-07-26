@@ -10,9 +10,11 @@ namespace PopMS.Model
     {
         [Display(Name ="仓库号")]
         [StringLength(50)]
+        [Required]
         public string DcNo { get; set; }
         [Display(Name = "仓库名")]
         [StringLength(50)]
+        [Required]
         public string Name { get; set; }
         [Display(Name = "备注")]
         [StringLength(500)]

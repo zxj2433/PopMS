@@ -38,8 +38,6 @@ namespace PopMS.ViewModel.userVMs
                 this.MakeGridHeader(x => x.CellPhone),
                 this.MakeGridHeader(x => x.PhotoId).SetFormat(PhotoIdFormat),
                 this.MakeGridHeader(x => x.IsValid),
-                this.MakeGridHeader(x => x.RoleName_view),
-                this.MakeGridHeader(x => x.GroupName_view),
                 this.MakeGridHeaderAction(width: 200)
             };
         }
@@ -86,9 +84,9 @@ namespace PopMS.ViewModel.userVMs
         public String Name_view { get; set; }
         [Display(Name = "部门")]
         public String DeptName_view { get; set; }
-        [Display(Name = "RoleName")]
+        [Display(Name = "角色")]
         public String RoleName_view { get; set; }
-        [Display(Name = "GroupName")]
+        [Display(Name = "组别")]
         public String GroupName_view { get; set; }
 
     }

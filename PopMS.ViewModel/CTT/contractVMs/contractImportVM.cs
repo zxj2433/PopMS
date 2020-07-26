@@ -12,6 +12,8 @@ namespace PopMS.ViewModel.CTT.contractVMs
 {
     public partial class contractTemplateVM : BaseTemplateVM
     {
+        [Display(Name = "合同编号")]
+        public ExcelPropety ID_Excel = ExcelPropety.CreateProperty<contract>(x => x.ContractID);
         [Display(Name = "合同名")]
         public ExcelPropety Name_Excel = ExcelPropety.CreateProperty<contract>(x => x.Name);
         [Display(Name = "供应商")]
@@ -25,6 +27,7 @@ namespace PopMS.ViewModel.CTT.contractVMs
 
 	    protected override void InitVM()
         {
+            FileDisplayName = "合同导入模板";
         }
 
     }

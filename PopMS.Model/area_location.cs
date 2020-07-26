@@ -8,7 +8,6 @@ namespace PopMS.Model
 {
     public class area_location:BasePoco
     {
-        [Display(Name ="区域")]
         public area Area { get; set; }
         [Display(Name = "区域")]
         [Required]

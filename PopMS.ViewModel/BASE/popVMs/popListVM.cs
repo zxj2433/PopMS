@@ -31,6 +31,7 @@ namespace PopMS.ViewModel.BASE.popVMs
         protected override IEnumerable<IGridColumn<pop_View>> InitGridHeader()
         {
             return new List<GridColumn<pop_View>>{
+                this.MakeGridHeader(x => x.GroupName),
                 this.MakeGridHeader(x => x.PopNo),
                 this.MakeGridHeader(x => x.PopName),
                 this.MakeGridHeaderAction(width: 200)
@@ -46,14 +47,17 @@ namespace PopMS.ViewModel.BASE.popVMs
 				    ID = x.ID,
                     PopNo = x.PopNo,
                     PopName = x.PopName,
+                    index=x.index,
+                    GroupName=x.Group.Name
                 })
-                .OrderBy(x => x.ID);
+                .OrderBy(x => x.index).ThenBy(r=>r.PopNo).ThenBy(r=>r.PopName);
             return query;
         }
 
     }
 
     public class pop_View : pop{
-
+        [Display(Name ="物料类型")]
+        public string GroupName { get; set; }
     }
 }
