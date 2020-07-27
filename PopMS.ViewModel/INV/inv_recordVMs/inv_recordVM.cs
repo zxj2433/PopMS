@@ -36,7 +36,7 @@ namespace PopMS.ViewModel.INV.inv_recordVMs
         {
             inventory inv = DC.Set<inventory>().Where(r =>r.ID == Entity.InvID).FirstOrDefault();
             List<inventoryIn> invIns = DC.Set<inventoryIn>().Where(r => r.InvID == Entity.InvID).ToList();
-            List<inventoryout> invOuts = DC.Set<inventoryout>().Include("sp").Where(r => r.InvID == Entity.InvID).ToList();
+            List<inventoryOut> invOuts = DC.Set<inventoryOut>().Include("sp").Where(r => r.InvID == Entity.InvID).ToList();
             if((Entity.Qty+ invOuts.Sum(r=>r.sp.AlcQty)-inv.Stock)>0)
             {
                 MSD.AddModelError("OverStock", "超出最大可用量限制");

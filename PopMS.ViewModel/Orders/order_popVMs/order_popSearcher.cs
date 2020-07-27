@@ -17,6 +17,8 @@ namespace PopMS.ViewModel.Orders.order_popVMs
         public List<ComboSelectListItem> AllContracts { get; set; }
         [Display(Name = "合同")]
         public Guid? ContractID { get; set; }
+        [Display(Name = "状态")]
+        public RecStatus? Status { get; set; }
         protected override void InitVM()
         {
             AllContracts = DC.Set<contract>().GetSelectListItems(LoginUserInfo?.DataPrivileges, null, x => x.ContractID + "-" + x.Name);

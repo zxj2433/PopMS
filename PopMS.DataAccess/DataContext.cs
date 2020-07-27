@@ -21,7 +21,8 @@ namespace PopMS.DataAccess
         public DbSet<dc> dcs { get; set; }
         public DbSet<dept> depts { get; set; }
         public DbSet<inventory> inventories { get; set; }
-        public DbSet<inventoryout> inventoryouts { get; set; }
+        public DbSet<inventoryIn> inventoryIns { get; set; }
+        public DbSet<inventoryOut> inventoryOuts { get; set; }
         public DbSet<order_pop> order_Pops { get; set; }
         public DbSet<pop> pops { get; set; }
         public DbSet<ship_pop> ship_Pops { get; set; }
@@ -35,8 +36,9 @@ namespace PopMS.DataAccess
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<pop>(e => e.HasIndex("PopNo").IsUnique());
+            modelBuilder.Entity<pop>(e => e.HasIndex("PopIndex").IsUnique());
             modelBuilder.Entity<contract>(e => e.HasIndex("ContractID").IsUnique());
+            modelBuilder.Entity<contract_pop>(e => e.HasKey(x=>new { x.ContractID,x.PopID}));
             base.OnModelCreating(modelBuilder);
         }
     }

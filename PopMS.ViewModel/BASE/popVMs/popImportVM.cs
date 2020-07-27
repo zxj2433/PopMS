@@ -14,8 +14,6 @@ namespace PopMS.ViewModel.BASE.popVMs
     {
         [Display(Name = "物料类型")]
         public ExcelPropety PopGroup_Excel = ExcelPropety.CreateProperty<pop>(x => x.GroupID);
-        [Display(Name = "物料编号")]
-        public ExcelPropety PopNo_Excel = ExcelPropety.CreateProperty<pop>(x => x.PopNo);
         [Display(Name = "物料名称")]
         public ExcelPropety PopName_Excel = ExcelPropety.CreateProperty<pop>(x => x.PopName);
         [Display(Name = "序号")]
@@ -32,7 +30,15 @@ namespace PopMS.ViewModel.BASE.popVMs
 
     public class popImportVM : BaseImportVM<popTemplateVM, pop>
     {
-
+        public override bool BatchSaveData()
+        {
+            SetEntityList();
+            foreach (var item in EntityList)
+            {
+                DC.Set<pop>().Add(item);
+            }
+            return DC.SaveChanges() > 0 ? true : false;
+        }
     }
 
 }

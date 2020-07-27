@@ -10,6 +10,7 @@ namespace PopMS.Model
     {
         [Display(Name ="仓库号")]
         [StringLength(50)]
+        [RegularExpression("^[0-9]+",ErrorMessage ="仓库号只能是数字")]
         [Required]
         public string DcNo { get; set; }
         [Display(Name = "仓库名")]

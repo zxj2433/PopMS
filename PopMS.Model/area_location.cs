@@ -16,6 +16,9 @@ namespace PopMS.Model
         [Required]
         [StringLength(20)]
         public string Location { get; set; }
+        /// <summary>
+        /// 可混放
+        /// </summary>
         [Display(Name = "可混放")]
         [Required]
         public bool? isMix { get; set; } = true;

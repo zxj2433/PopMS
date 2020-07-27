@@ -22,6 +22,7 @@ namespace PopMS.ViewModel.Orders.order_popVMs
 
         public order_popVM()
         {
+            SetInclude(x => x.ContractPop);
         }
 
         protected override void InitVM()
@@ -66,17 +67,27 @@ namespace PopMS.ViewModel.Orders.order_popVMs
             if(Location==null||Location==Guid.Empty)
             {
                 MSD.AddModelError("NullLocation", "请选择上架货位");
+                return false;
             }
             if(RecQty>(Entity.OrderQty-Entity.RecQty))
             {
                 MSD.AddModelError("QtyOver", "实收数量不能大于剩余可收货数量");
                 return false;
             }
-            if(Location==null||Location==Guid.Empty)
+            var loc = DC.Set<area_location>().AsNoTracking().Where(r => r.ID == Location.Value).FirstOrDefault();
+            if(!loc.isMix.Value)
             {
-                MSD.AddModelError("NullLocation", "请选择上架货位");
-                return false;
+                var invs = DC.Set<inventory>().Where(r => r.LocationID == Location.Value);
+                var InInvs = DC.Set<inventoryIn>().Include("OrderPop.ContractPop").Where(r => invs.Select(x => x.ID).Contains(r.InvID));
+                List<Guid> pops = InInvs.Select(r => r.OrderPop.ContractPop.PopID).ToList();
+                pops.Add(Entity.ContractPop.PopID);
+                if (pops.Distinct().Count() > 1)
+                {
+                    MSD.AddModelError("LocNotMix", "货位不可混放，但当前货位已经有其他货品了");
+                    return false;
+                }
             }
+            
             inventory inv = new inventory
             {
                 ID = Guid.NewGuid(),
@@ -96,6 +107,7 @@ namespace PopMS.ViewModel.Orders.order_popVMs
             DC.AddEntity(inv);
             DC.AddEntity(InvIn);
             var OrderPop = DC.Set<order_pop>().Where(r => r.ID == Entity.ID).FirstOrDefault();
+            OrderPop.Status = OrderPop.RecQty + RecQty == OrderPop.OrderQty ? RecStatus.FINISH : RecStatus.ING;
             OrderPop.RecQty += RecQty;
             OrderPop.RecTime = DateTime.Now;
             OrderPop.RecUser = LoginUserInfo.ITCode + " | " + LoginUserInfo.Name;

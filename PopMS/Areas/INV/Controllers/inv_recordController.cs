@@ -49,7 +49,7 @@ namespace PopMS.Controllers
             {
                 vm.Entity.InvID = ID;
                 vm.Entity.Inv = DC.Set<inventory>().Where(r => r.ID == ID).FirstOrDefault();
-                var InvOuts = DC.Set<inventoryout>().Include("sp").Where(r => r.InvID == vm.Entity.InvID);
+                var InvOuts = DC.Set<inventoryOut>().Include("sp").Where(r => r.InvID == vm.Entity.InvID);
                 vm.UsedQty = InvOuts.Where(r => r.sp.Status == ShipStatus.FINISH).Sum(r => r.sp.AlcQty);
                 vm.AlcQty = InvOuts.Where(r => r.sp.Status == ShipStatus.ING).Sum(r => r.sp.AlcQty);
                 vm.EnableQty = vm.Entity.Inv.Stock - vm.UsedQty - vm.AlcQty;

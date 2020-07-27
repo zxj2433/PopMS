@@ -59,6 +59,6 @@ namespace PopMS.Model
         [Display(Name ="申请单号")]
         public Guid? Ship_Pop_SumID { get; set; }
 
-        public List<inventoryout> ShipIn { get; set; }
+        public List<inventoryOut> ShipIn { get; set; }
     }
 }

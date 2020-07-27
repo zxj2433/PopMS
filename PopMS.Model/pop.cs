@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using WalkingTec.Mvvm.Core;
 
@@ -13,15 +14,29 @@ namespace PopMS.Model
         [Required]
         public Guid GroupID { get; set; }
         [Display(Name = "物料编号")]
-        [RegularExpression("^[0-9A-Z]+",ErrorMessage ="只能是数字或字母")]
-        [StringLength(50)]
-        [Required]
-        public string PopNo { get; set; }
+        public string PopNo
+        {
+            get
+            {
+                return (10000 + PopIndex).ToString();
+            }
+        }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int? PopIndex { get; set; }
         [Display(Name = "物料名称")]
         [StringLength(100)]
         [Required]
         public string PopName { get; set; }
         [Display(Name ="序号")]
         public int? index { get; set; }
+        [NotMapped]
+        [Display(Name ="物料名")]
+        public string PopNoName
+        {
+            get
+            {
+                return PopNo +"-"+ PopName;
+            }
+        }
     }
 }

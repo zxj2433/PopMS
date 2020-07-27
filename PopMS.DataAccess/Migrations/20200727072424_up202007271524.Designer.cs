@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PopMS.DataAccess;
 
 namespace PopMS.DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200727072424_up202007271524")]
+    partial class up202007271524
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -158,14 +160,16 @@ namespace PopMS.DataAccess.Migrations
 
             modelBuilder.Entity("PopMS.Model.contract_pop", b =>
                 {
-                    b.Property<Guid?>("ContractID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("PopID")
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Cnt")
                         .HasColumnType("int");
+
+                    b.Property<Guid?>("ContractID")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CreateBy")
                         .HasColumnType("nvarchar(50)")
@@ -174,7 +178,7 @@ namespace PopMS.DataAccess.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("ID")
+                    b.Property<Guid>("PopID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("Price")
@@ -192,7 +196,9 @@ namespace PopMS.DataAccess.Migrations
                     b.Property<DateTime?>("UpdateTime")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ContractID", "PopID");
+                    b.HasKey("ID");
+
+                    b.HasIndex("ContractID");
 
                     b.HasIndex("PopID");
 
@@ -430,13 +436,7 @@ namespace PopMS.DataAccess.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<Guid>("ContractPopContractID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("ContractPopID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ContractPopPopID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CreateBy")
@@ -474,7 +474,7 @@ namespace PopMS.DataAccess.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("ContractPopContractID", "ContractPopPopID");
+                    b.HasIndex("ContractPopID");
 
                     b.ToTable("order_Pops");
                 });
@@ -1391,7 +1391,7 @@ namespace PopMS.DataAccess.Migrations
                 {
                     b.HasOne("PopMS.Model.contract_pop", "ContractPop")
                         .WithMany()
-                        .HasForeignKey("ContractPopContractID", "ContractPopPopID")
+                        .HasForeignKey("ContractPopID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

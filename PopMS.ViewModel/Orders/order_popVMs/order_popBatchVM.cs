@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using WalkingTec.Mvvm.Core;
 using WalkingTec.Mvvm.Core.Extensions;
 using PopMS.Model;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace PopMS.ViewModel.Orders.order_popVMs
 {
@@ -17,7 +17,17 @@ namespace PopMS.ViewModel.Orders.order_popVMs
             ListVM = new order_popListVM();
             LinkedVM = new order_pop_BatchEdit();
         }
-
+        public override bool DoBatchDelete()
+        {
+            var Orders = DC.Set<inventoryIn>().Include("Inv").Where(r => Ids.Select(x => int.Parse(x)).ToList().Contains(r.OrderPopID));
+            foreach (var item in Orders)
+            {
+                DC.Set<inventoryIn>().Remove(item);
+                DC.Set<inventory>().Remove(item.Inv);
+                //DC.SaveChanges();
+            }
+            return base.DoBatchDelete();
+        }
     }
 
 	/// <summary>

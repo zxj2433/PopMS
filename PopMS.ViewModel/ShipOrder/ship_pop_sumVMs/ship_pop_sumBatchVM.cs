@@ -20,16 +20,17 @@ namespace PopMS.ViewModel.ShipOrder.ship_pop_sumVMs
         public override bool DoBatchDelete()
         {
             var sps = DC.Set<ship_pop>().Include("ShipIn").Where(r => Ids.Select(x => Guid.Parse(x)).ToList().Contains(r.Ship_Pop_SumID.Value));
-            foreach (var item in sps)
+            var Invs = DC.Set<inventoryOut>().Include("Inv").Include("sp").Where(r => Ids.Select(x => Guid.Parse(x)).Contains(r.sp.Ship_Pop_SumID.Value));
+
+            foreach (var item in Invs)
             {
-                item.Ship_Pop_SumID = null;
-                item.Status = ShipStatus.NEW;
-                foreach (var inv in item.ShipIn)
-                {
-                    inv.Inv.UsedQty -= inv.OutQty;
-                    item.AlcQty -= inv.OutQty;
-                }
-                DC.Set<inventoryout>().RemoveRange(item.ShipIn);
+                item.sp.Ship_Pop_SumID = null;
+                item.sp.Status = ShipStatus.NEW;
+                item.sp.AlcQty -= item.OutQty;
+                item.Inv.UsedQty -= item.OutQty;
+                DC.Set<ship_pop>().Update(item.sp);
+                DC.Set<inventory>().Update(item.Inv);
+                DC.Set<inventoryOut>().Remove(item);
             }            
             return base.DoBatchDelete();
         }

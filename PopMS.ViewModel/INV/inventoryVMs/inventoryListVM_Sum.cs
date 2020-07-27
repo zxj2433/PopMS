@@ -54,7 +54,7 @@ namespace PopMS.ViewModel.INV.inventoryVMs
                         .CheckBetween(Searcher.Date?.GetStartTime(), Searcher.Date?.GetEndTime(), x => x.CreateTime)
                         on p.ID equals In.ContractPop.PopID into Ins
                         from Insf in Ins.DefaultIfEmpty()
-                        join Out in DC.Set<inventoryout>().DPWhere(LoginUserInfo?.DataPrivileges, x => x.Inv.Location.Area.DCID)
+                        join Out in DC.Set<inventoryOut>().DPWhere(LoginUserInfo?.DataPrivileges, x => x.Inv.Location.Area.DCID)
                         .CheckBetween(Searcher.Date?.GetStartTime(), Searcher.Date?.GetEndTime(), x => x.sp.CreateTime)
                         on p.ID equals Out.sp.PopID into Outs
                         from Outsf in Outs.DefaultIfEmpty()

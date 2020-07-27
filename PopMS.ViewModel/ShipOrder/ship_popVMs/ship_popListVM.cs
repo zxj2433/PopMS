@@ -18,8 +18,8 @@ namespace PopMS.ViewModel.ShipOrder.ship_popVMs
             return new List<GridAction>
             {
                 //this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.Create, Localizer["Create"],"ShipOrder", dialogWidth: 800),
-                this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.Edit, Localizer["Edit"],"ShipOrder", dialogWidth: 800),
-                this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.Delete, Localizer["Delete"], "ShipOrder",dialogWidth: 800),
+                this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.Edit, Localizer["Edit"],"ShipOrder", dialogWidth: 800).SetBindVisiableColName("isNew"),
+                this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.Delete, Localizer["Delete"], "ShipOrder",dialogWidth: 800).SetBindVisiableColName("isNew"),
                 //this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.Details, Localizer["Details"],"ShipOrder", dialogWidth: 800),
                 //this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.BatchEdit, Localizer["BatchEdit"],"ShipOrder", dialogWidth: 800),
                 //this.MakeStandardAction("ship_pop", GridActionStandardTypesEnum.BatchDelete, Localizer["BatchDelete"],"ShipOrder", dialogWidth: 800),
@@ -39,6 +39,7 @@ namespace PopMS.ViewModel.ShipOrder.ship_popVMs
                 this.MakeGridHeader(x => x.PopName_view),
                 this.MakeGridHeader(x => x.OrderQty),
                 this.MakeGridHeader(x => x.Status),
+                this.MakeGridHeader(x=>x.isNew).SetHide(true),
                 this.MakeGridHeader(x => x.ShipUser),
                 this.MakeGridHeader(x => x.ShipTime),
                 this.MakeGridHeader(x => x.OrderRemark_view),
@@ -79,6 +80,14 @@ namespace PopMS.ViewModel.ShipOrder.ship_popVMs
         public String PopName_view { get; set; }
         [Display(Name = "备注")]
         public String OrderRemark_view { get; set; }
+
+        public string isNew
+        {
+            get
+            {
+                return Status == ShipStatus.NEW ? "true" : "false";
+            }
+        }
 
     }
 }

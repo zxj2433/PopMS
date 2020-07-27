@@ -57,7 +57,7 @@ namespace PopMS.ViewModel.CTT.contract_popVMs
                     Price = x.Price,
                     Name_view = x.Contract.Name,
                     OrderedQty=DC.Set<order_pop>().Where(r=>r.ContractPopID==x.ID).Sum(r=>r.OrderQty),
-                    ShippedQty=DC.Set<inventoryout>().Where(r=>r.Inv.InvIn.First().OrderPop.ContractPopID==x.ID).Sum(r=>r.sp.AlcQty)
+                    ShippedQty=DC.Set<inventoryOut>().Where(r=>r.Inv.InvIn.First().OrderPop.ContractPopID==x.ID).Sum(r=>r.sp.AlcQty)
                 })
                 .OrderBy(x => x.ID);
             return query;

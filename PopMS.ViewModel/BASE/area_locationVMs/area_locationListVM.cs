@@ -50,7 +50,7 @@ namespace PopMS.ViewModel.BASE.area_locationVMs
                     Location = x.Location,
                     isMix = x.isMix,
                 })
-                .OrderBy(x => x.ID);
+                .OrderBy(x => x.Area_view).ThenBy(x=>x.Location);
             return query;
         }
 

@@ -24,8 +24,10 @@ namespace PopMS.ViewModel.CTT.contractVMs
         public ExcelPropety StartDate_Excel = ExcelPropety.CreateProperty<contract>(x => x.StartDate);
         [Display(Name = "失效日期")]
         public ExcelPropety EndDate_Excel = ExcelPropety.CreateProperty<contract>(x => x.EndDate);
+        [Display(Name = "合同金额")]
+        public ExcelPropety Cost_Excel = ExcelPropety.CreateProperty<contract>(x => x.MaxCost);
 
-	    protected override void InitVM()
+        protected override void InitVM()
         {
             FileDisplayName = "合同导入模板";
         }
@@ -34,7 +36,15 @@ namespace PopMS.ViewModel.CTT.contractVMs
 
     public class contractImportVM : BaseImportVM<contractTemplateVM, contract>
     {
-
+        public override bool BatchSaveData()
+        {
+            SetEntityList();
+            foreach (var item in EntityList)
+            {
+                item.DCID = DC.Set<user>().Where(r => r.ID == LoginUserInfo.Id).FirstOrDefault().DCID.Value;
+            }
+            return base.BatchSaveData();
+        }
     }
 
 }

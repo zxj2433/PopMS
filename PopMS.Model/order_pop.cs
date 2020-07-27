@@ -15,11 +15,6 @@ namespace PopMS.Model
         [Display(Name ="新建")]
         NEW,
         /// <summary>
-        /// 取消
-        /// </summary>
-        [Display(Name = "取消")]
-        CANCEL,
-        /// <summary>
         /// 正在入库
         /// </summary>
         [Display(Name = "正在入库")]
@@ -48,8 +43,8 @@ namespace PopMS.Model
         public Guid ContractPopID { get; set; }
         [Display(Name = "备注")]
         public string Remark { get; set; }
-        [Display(Name ="状态")]
-        public RecStatus Status { get; set; }
+        [Display(Name = "状态")]
+        public RecStatus Status { get; set; } = RecStatus.NEW;
         [Display(Name = "订货数量")]
         public int OrderQty { get; set; }
         [Display(Name = "已收数量")]

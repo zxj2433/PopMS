@@ -7,7 +7,7 @@ using WalkingTec.Mvvm.Core.Attributes;
 namespace PopMS.Model
 {
     [MiddleTable]
-    public class inventoryout:BasePoco
+    public class inventoryOut:BasePoco
     {
         public inventory Inv { get; set; }
         public Guid InvID { get; set; }

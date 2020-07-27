@@ -46,7 +46,7 @@ namespace PopMS.ViewModel.INV.inventoryVMs
             var query = DC.Set<order_pop>()
                 .Include("ContractPop.Pop")
                 .CheckEqual(Searcher.GroupID, x => x.ContractPop.Pop.GroupID)
-                .GroupBy(x=> new { x.ContractPop.PopID, x.ContractPop.Pop.PopNo, x.ContractPop.Pop.PopName, x.ContractPop.UnitPack, x.ContractPop.Cnt })
+                .GroupBy(x=> new { x.ContractPop.PopID, x.ContractPop.Pop.PopIndex, x.ContractPop.Pop.PopName, x.ContractPop.UnitPack, x.ContractPop.Cnt })
                 .Select(x => new inventory_View
                 {
                     ID = x.Key.PopID,

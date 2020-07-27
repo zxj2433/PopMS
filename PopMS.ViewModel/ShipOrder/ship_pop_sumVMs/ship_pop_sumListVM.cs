@@ -55,7 +55,7 @@ namespace PopMS.ViewModel.ShipOrder.ship_pop_sumVMs
             }
             else
             {
-                var query = DC.Set<inventoryout>()
+                var query = DC.Set<inventoryOut>()
                         .CheckBetween(Searcher.OrderDate?.GetStartTime(), Searcher.OrderDate?.GetEndTime(), x => x.sp.Ship_Pop_Sum.OrderDate)
                         .CheckEqual(Searcher.Status, x => x.sp.Status)
                         .GroupBy(x => new {

@@ -711,7 +711,7 @@ namespace PopMS.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "inventoryouts",
+                name: "inventoryOuts",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(nullable: false),
@@ -725,15 +725,15 @@ namespace PopMS.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_inventoryouts", x => x.ID);
+                    table.PrimaryKey("PK_inventoryOuts", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_inventoryouts_inventories_InvID",
+                        name: "FK_inventoryOuts_inventories_InvID",
                         column: x => x.InvID,
                         principalTable: "inventories",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_inventoryouts_ship_Pops_spID",
+                        name: "FK_inventoryOuts_ship_Pops_spID",
                         column: x => x.spID,
                         principalTable: "ship_Pops",
                         principalColumn: "ID",
@@ -914,13 +914,13 @@ namespace PopMS.DataAccess.Migrations
                 column: "OrderPopID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_inventoryouts_InvID",
-                table: "inventoryouts",
+                name: "IX_inventoryOuts_InvID",
+                table: "inventoryOuts",
                 column: "InvID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_inventoryouts_spID",
-                table: "inventoryouts",
+                name: "IX_inventoryOuts_spID",
+                table: "inventoryOuts",
                 column: "spID");
 
             migrationBuilder.CreateIndex(
@@ -989,7 +989,7 @@ namespace PopMS.DataAccess.Migrations
                 name: "inventoryIn");
 
             migrationBuilder.DropTable(
-                name: "inventoryouts");
+                name: "inventoryOuts");
 
             migrationBuilder.DropTable(
                 name: "PersistedGrants");

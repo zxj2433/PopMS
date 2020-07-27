@@ -39,7 +39,7 @@ namespace PopMS.ViewModel.ShipOrder.ship_pop_sumVMs
                         int AlcQty = Math.Min(inv.Stock - inv.UsedQty, item.OrderQty.Value - item.AlcQty);
                         inv.UsedQty += AlcQty;
                         item.AlcQty += AlcQty;
-                        inventoryout InvOut = new inventoryout
+                        inventoryOut InvOut = new inventoryOut
                         {
                             CreateBy=LoginUserInfo.ITCode,
                             CreateTime=DateTime.Now,
@@ -48,7 +48,7 @@ namespace PopMS.ViewModel.ShipOrder.ship_pop_sumVMs
                             OutQty = AlcQty
                         };
                         DC.UpdateEntity(inv);
-                        DC.Set<inventoryout>().Add(InvOut);
+                        DC.Set<inventoryOut>().Add(InvOut);
                     }
                     else
                     {

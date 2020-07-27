@@ -45,12 +45,12 @@ namespace PopMS.ViewModel.BASE.popVMs
                 .Select(x => new pop_View
                 {
 				    ID = x.ID,
-                    PopNo = x.PopNo,
+                    PopIndex = x.PopIndex,
                     PopName = x.PopName,
                     index=x.index,
                     GroupName=x.Group.Name
                 })
-                .OrderBy(x => x.index).ThenBy(r=>r.PopNo).ThenBy(r=>r.PopName);
+                .OrderBy(x => x.GroupName).ThenBy(r=>r.index).ThenBy(r=>r.PopName);
             return query;
         }
 

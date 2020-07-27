@@ -36,6 +36,7 @@ namespace PopMS.ViewModel.Orders.order_popVMs
                 this.MakeGridHeader(x => x.PopName),
                  this.MakeGridHeader(x => x.CreateBy),
                 this.MakeGridHeader(x => x.CreateTime),
+                this.MakeGridHeader(x => x.Status),
                 this.MakeGridHeader(x => x.UnitCost),
                 this.MakeGridHeader(x => x.OrderQty),
                 this.MakeGridHeader(x => x.TotalCost),
@@ -52,6 +53,7 @@ namespace PopMS.ViewModel.Orders.order_popVMs
                 .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.ContractPop.Contract.DCID)
                 .CheckBetween(Searcher.OrderDate?.GetStartTime(),Searcher.OrderDate?.GetEndTime(),x=>x.CreateTime)
                 .CheckEqual(Searcher.ContractID,x=>x.ContractPop.ContractID)
+                .CheckEqual(Searcher.Status,x=>x.Status)
                 .Select(x => new order_pop_View
                 {
 				    ID = x.ID,
@@ -60,6 +62,7 @@ namespace PopMS.ViewModel.Orders.order_popVMs
                     UnitCost=x.ContractPop.Price,
                     OrderQty = x.OrderQty,
                     RecQty = x.RecQty,
+                    Status=x.Status,
                     RecUser = x.RecUser,
                     RecTime = x.RecTime,
                     CreateBy=x.CreateBy,

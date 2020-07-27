@@ -20,7 +20,7 @@ namespace PopMS.Model
         public string PutUser { get; set; }
         [Display(Name = "上架时间")]
         public DateTime? PutTime { get; set; }
-        public List<inventoryout> InvOut { get; set; }
+        public List<inventoryOut> InvOut { get; set; }
         public List<inventoryIn> InvIn { get; set; }
     }
 }

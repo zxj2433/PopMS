@@ -391,7 +391,7 @@ namespace PopMS.DataAccess.Migrations
                     b.ToTable("inventoryIn");
                 });
 
-            modelBuilder.Entity("PopMS.Model.inventoryout", b =>
+            modelBuilder.Entity("PopMS.Model.inventoryOut", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
@@ -426,7 +426,7 @@ namespace PopMS.DataAccess.Migrations
 
                     b.HasIndex("spID");
 
-                    b.ToTable("inventoryouts");
+                    b.ToTable("inventoryOuts");
                 });
 
             modelBuilder.Entity("PopMS.Model.order_pop", b =>
@@ -1372,7 +1372,7 @@ namespace PopMS.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PopMS.Model.inventoryout", b =>
+            modelBuilder.Entity("PopMS.Model.inventoryOut", b =>
                 {
                     b.HasOne("PopMS.Model.inventory", "Inv")
                         .WithMany("InvOut")

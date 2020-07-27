@@ -15,6 +15,8 @@ namespace PopMS.ViewModel.BASE.popVMs
         public List<ComboSelectListItem> AllGroups { get; set; }
         public popVM()
         {
+            SetInclude(x => x.Group);
+            SetInclude(x => x.Group.DC);
         }
 
         protected override void InitVM()
