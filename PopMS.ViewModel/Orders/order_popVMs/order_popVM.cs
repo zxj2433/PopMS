@@ -51,19 +51,17 @@ namespace PopMS.ViewModel.Orders.order_popVMs
 
         public override void DoAdd()
         {
-            var MaxCost = DC.Set<order_pop>()
-                .Include("ContractPop")
-                .Include("ContractPop.Contract")
-                .Where(r => r.ContractPopID == Entity.ContractPopID).FirstOrDefault().ContractPop.Contract.MaxCost;
+            var MaxCost = DC.Set<contract_pop>()
+                .Include("Contract")
+                .Where(r => r.ID == Entity.ContractPopID).FirstOrDefault().Contract.MaxCost;
             //var MaxCost = DC.Set<contract>().Where(r => r.ID == OrderPop.ContractPop.ContractID).FirstOrDefault().MaxCost;
             var CurQty = DC.Set<order_pop>()
                 .Include("ContractPop")
                 .Include("ContractPop.Contract")
                 .Where(r => r.ContractPopID == Entity.ContractPopID).Sum(x=>x.OrderQty);
-            var Price= DC.Set<order_pop>()
-                .Include("ContractPop")
-                .Include("ContractPop.Contract")
-                .Where(r => r.ContractPopID == Entity.ContractPopID).FirstOrDefault().ContractPop.Price;
+            var Price= DC.Set<contract_pop>()
+                .Include("Contract")
+                .Where(r => r.ID == Entity.ContractPopID).FirstOrDefault().Price;
             if (MaxCost > 0 && (CurQty+Entity.OrderQty)*Price>MaxCost)
             {
                 MSD.AddModelError("OverCost", "合同订货金额超出最大限制");
