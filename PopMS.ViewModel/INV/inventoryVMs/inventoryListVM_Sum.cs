@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using PopMS.Model;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace PopMS.ViewModel.INV.inventoryVMs
 {
@@ -48,45 +49,53 @@ namespace PopMS.ViewModel.INV.inventoryVMs
 
         public override IOrderedQueryable<inventory_View> GetSearchQuery()
         {
-            var baseQuery = (from p in DC.Set<pop>().Include("Group")
-                             //.DPWhere(LoginUserInfo?.DataPrivileges, x => x.Group.DCID)
-                        join In in DC.Set<order_pop>().DPWhere(LoginUserInfo?.DataPrivileges, x => x.ContractPop.Contract.DCID)
-                        .CheckBetween(Searcher.Date?.GetStartTime(), Searcher.Date?.GetEndTime(), x => x.CreateTime)
-                        on p.ID equals In.ContractPop.PopID into Ins
-                        from Insf in Ins.DefaultIfEmpty()
-                        join Out in DC.Set<inventoryOut>().DPWhere(LoginUserInfo?.DataPrivileges, x => x.Inv.Location.Area.DCID)
-                        .CheckBetween(Searcher.Date?.GetStartTime(), Searcher.Date?.GetEndTime(), x => x.sp.CreateTime)
-                        on p.ID equals Out.sp.PopID into Outs
-                        from Outsf in Outs.DefaultIfEmpty()
+            var Query = from x in DC.Set<pop>().AsNoTracking()
+                        .Include("Group")
+                        .DPWhere(LoginUserInfo?.DataPrivileges, x => x.Group.DCID)
+                        .CheckEqual(Searcher.PopID, x => x.ID)
+                        join I in DC.Set<order_pop>().AsNoTracking()
+                        .Include("ContractPop").Include("ContractPop.Contract")
+                        .DPWhere(LoginUserInfo?.DataPrivileges, x => x.ContractPop.Contract.DCID)
+                        .CheckBetween(Searcher.InvDate?.GetStartTime(), Searcher.InvDate?.GetEndTime(), x => x.CreateTime)
+                        .CheckEqual(Searcher.PopID, x => x.ContractPop.PopID)
+                        .GroupBy(x => x.ContractPop.PopID)
+                        .Select(x => new order_pop
+                        {
+                            ContractPopID = x.Key,
+                            OrderQty = x.Sum(x => x.OrderQty),
+                            Price = x.Sum(x => x.OrderQty*x.Price),
+                            RecQty = x.Sum(x => x.RecQty),
+                            RecTime = x.Max(x => x.RecTime)
+                        })
+                        on x.ID equals I.ContractPopID into INs
+                        from IN in INs.DefaultIfEmpty()
+                        join O in DC.Set<ship_pop>().AsNoTracking()
+                        .DPWhere(LoginUserInfo?.DataPrivileges, x => x.User.DCID)
+                        .CheckBetween(Searcher.InvDate?.GetStartTime(), Searcher.InvDate?.GetEndTime(), x => x.CreateTime)
+                        .CheckEqual(Searcher.PopID, x => x.PopID)
+                        .GroupBy(x => x.PopID)
+                        .Select(x => new ship_pop
+                        {
+                            PopID = x.Key,
+                            AlcQty = x.Sum(x => x.AlcQty),
+                            CreateTime = x.Max(x => x.CreateTime)
+                        })
+                        on x.ID equals O.PopID into OUTs
+                        from OUT in OUTs.DefaultIfEmpty()
                         select new inventory_View
                         {
-                            ID = p.ID,
-                            PopName = p.PopName,
-                            PutTime = Insf.RecTime,
-                            OutDate = Outsf.sp.CreateTime,
-                            OrderQty = Insf.OrderQty,
-                            OnHandQty=Insf.OrderQty-Insf.RecQty,
-                            Stock=Insf.RecQty,
-                            UsedQty = Outsf.sp.AlcQty,
-                            TotalPrice = Insf.ContractPop.Price * Insf.OrderQty,
-                            UsedPrice = Outsf.sp.AlcQty * Outsf.Inv.InvIn.First().OrderPop.ContractPop.Price
-                        }).ToList();
-            var query = from q in baseQuery
-                        group q by new { q.ID, q.PopName } into x
-                        select new inventory_View
-                        {
-                            ID = x.Key.ID,
-                            PopName = x.Key.PopName,
-                            InDate = x.Max(r => r.PutTime),
-                            OutDate = x.Max(r => r.OutDate),
-                            OrderQty=x.Sum(r=>r.OrderQty),
-                            OnHandQty=x.Sum(r=>r.OnHandQty),
-                            Stock = x.Sum(r => r.Stock),
-                            UsedQty = x.Sum(r => r.UsedQty),
-                            TotalPrice = x.Sum(r => r.TotalPrice),
-                            UsedPrice = x.Sum(r => r.UsedPrice)
+                            ID = x.ID,
+                            PopGroup = x.Group.Name,
+                            PopName = x.PopName,
+                            InDate = IN.RecTime,
+                            OutDate = OUT.CreateTime,
+                            OrderQty = IN.OrderQty,
+                            OnHandQty=IN.OrderQty-IN.RecQty,
+                            Stock=IN.RecQty,
+                            UsedQty = OUT.AlcQty,
+                            TotalPrice = IN.Price
                         };
-            return query.AsQueryable().OrderBy(r=>r.PopName);
+            return Query.AsQueryable().OrderBy(r=>r.PopName);
         }
 
     }

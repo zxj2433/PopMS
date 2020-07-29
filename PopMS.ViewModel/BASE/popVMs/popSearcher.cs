@@ -14,9 +14,13 @@ namespace PopMS.ViewModel.BASE.popVMs
     {
         [Display(Name = "物料名称")]
         public String PopName { get; set; }
+        public List<ComboSelectListItem> PopAllGroups { get; set; }
+        [Display(Name = "物料类型")]
+        public Guid? PopGroup { get; set; }
 
         protected override void InitVM()
         {
+            PopAllGroups = DC.Set<pop_group>().GetSelectListItems(LoginUserInfo?.DataPrivileges, null, x => x.Name);
         }
 
     }

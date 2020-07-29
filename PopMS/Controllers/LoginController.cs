@@ -8,6 +8,9 @@ using WalkingTec.Mvvm.Core;
 using WalkingTec.Mvvm.Core.Extensions;
 using WalkingTec.Mvvm.Mvc;
 using PopMS.ViewModel.HomeVMs;
+using PopMS.Model;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace PopMS.Controllers
 {
@@ -56,7 +59,16 @@ namespace PopMS.Controllers
                 }
                 else
                 {
-                    url = "/#/INV/inventorySum/Index";
+                    if(DC.Set<user>().Include("UserRoles").Where(r=>r.ID==LoginUserInfo.Id).FirstOrDefault().UserRoles.FirstOrDefault().Role.RoleName=="领用人")
+                    {
+                        url = "/#/ShipOrder/ship_pop/Index";
+                        
+                    }
+                    else
+                    {
+                        url = "/#/INV/inventorySum/Index";
+                    }
+                    
                 }
 
                 AuthenticationProperties properties = null;

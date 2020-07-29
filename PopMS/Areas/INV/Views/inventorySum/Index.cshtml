@@ -3,8 +3,7 @@
 
 <wt:searchpanel vm="@Model" reset-btn="true">
 <wt:row items-per-row="ItemsPerRowEnum.Three">
-    <wt:datetime field="Searcher.Date" range="true" type="Date" />
-<wt:combobox field="Searcher.LocationID" items="Searcher.AllLocations" empty-text="@Localizer["All"]" />
+<wt:datetime field="Searcher.InvDate" range="true" />
 <wt:combobox field="Searcher.PopID" items="Searcher.AllPops" empty-text="@Localizer["All"]" />
 </wt:row>
 </wt:searchpanel>

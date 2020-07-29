@@ -32,6 +32,7 @@ namespace PopMS.Model
         public new int ID { get; set; }
 
         [Display(Name ="批次")]
+        [NotMapped]
         public string Lot {
             get
             {
@@ -54,5 +55,6 @@ namespace PopMS.Model
         public string RecUser { get; set; }
         [Display(Name = "收货时间")]
         public DateTime? RecTime { get; set; }
+        public double Price { get; set; }
     }
 }

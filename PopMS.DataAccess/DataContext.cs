@@ -38,7 +38,7 @@ namespace PopMS.DataAccess
         {
             modelBuilder.Entity<pop>(e => e.HasIndex("PopIndex").IsUnique());
             modelBuilder.Entity<contract>(e => e.HasIndex("ContractID").IsUnique());
-            modelBuilder.Entity<contract_pop>(e => e.HasKey(x=>new { x.ContractID,x.PopID}));
+            modelBuilder.Entity<contract_pop>(e => e.HasIndex(x => new { x.ContractID, x.PopID }).IsUnique());
             base.OnModelCreating(modelBuilder);
         }
     }

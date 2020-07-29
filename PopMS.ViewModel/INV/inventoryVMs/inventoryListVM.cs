@@ -39,9 +39,9 @@ namespace PopMS.ViewModel.INV.inventoryVMs
                 this.MakeGridHeader(x => x.Cnt),
                 this.MakeGridHeader(x => x.Price),
                 this.MakeGridHeader(x => x.Stock),
-                this.MakeGridHeader(x => x.TotalPrice),    
+                //this.MakeGridHeader(x => x.TotalPrice),    
                 this.MakeGridHeader(x => x.EnableQty),
-                this.MakeGridHeader(x => x.EnablePrice),
+                //this.MakeGridHeader(x => x.EnablePrice),
                 this.MakeGridHeader(x => x.PutUser),
                 this.MakeGridHeader(x => x.PutTime),
                 this.MakeGridHeader(x => x.OutDate),
@@ -117,5 +117,7 @@ namespace PopMS.ViewModel.INV.inventoryVMs
         public int OrderQty { get; set; }
         [Display(Name = "在途数量")]
         public int OnHandQty { get; set; }
+        [Display(Name ="物料分组")]
+        public string PopGroup { get; set; }
     }
 }

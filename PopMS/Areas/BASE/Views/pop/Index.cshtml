@@ -3,7 +3,7 @@
 
 <wt:searchpanel vm="@Model" reset-btn="true">
 <wt:row items-per-row="ItemsPerRowEnum.Three">
-<wt:textbox field="Searcher.PopName" />
+<wt:combobox field="Searcher.PopGroup" items="Searcher.PopAllGroups" />
 </wt:row>
 </wt:searchpanel>
 <wt:grid vm="@Model" url="/BASE/pop/Search"/>

@@ -34,7 +34,8 @@ namespace PopMS.ViewModel.Orders.order_popVMs
             return new List<GridColumn<order_pop_View>>{
                 this.MakeGridHeader(x => x.ContractName),
                 this.MakeGridHeader(x => x.PopName),
-                 this.MakeGridHeader(x => x.CreateBy),
+                this.MakeGridHeader(x=>x.UnitPack),
+                this.MakeGridHeader(x => x.CreateBy),
                 this.MakeGridHeader(x => x.CreateTime),
                 this.MakeGridHeader(x => x.Status),
                 this.MakeGridHeader(x => x.UnitCost),
@@ -63,6 +64,7 @@ namespace PopMS.ViewModel.Orders.order_popVMs
                     OrderQty = x.OrderQty,
                     RecQty = x.RecQty,
                     Status=x.Status,
+                    UnitPack=x.ContractPop.UnitPack,
                     RecUser = x.RecUser,
                     RecTime = x.RecTime,
                     CreateBy=x.CreateBy,
@@ -81,6 +83,8 @@ namespace PopMS.ViewModel.Orders.order_popVMs
         public String ContractName { get; set; }
         [Display(Name = "单价")]
         public double UnitCost { get; set; }
+        [Display(Name ="单位")]
+        public string UnitPack { get; set; }
         [Display(Name = "总金额")]
         public double TotalCost {
             get

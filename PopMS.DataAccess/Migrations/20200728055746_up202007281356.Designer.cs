@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PopMS.DataAccess;
 
 namespace PopMS.DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200728055746_up202007281356")]
+    partial class up202007281356
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -158,16 +160,14 @@ namespace PopMS.DataAccess.Migrations
 
             modelBuilder.Entity("PopMS.Model.contract_pop", b =>
                 {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid?>("ContractID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PopID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Cnt")
                         .HasColumnType("int");
-
-                    b.Property<Guid?>("ContractID")
-                        .IsRequired()
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CreateBy")
                         .HasColumnType("nvarchar(50)")
@@ -176,7 +176,7 @@ namespace PopMS.DataAccess.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("PopID")
+                    b.Property<Guid>("ID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("Price")
@@ -194,12 +194,9 @@ namespace PopMS.DataAccess.Migrations
                     b.Property<DateTime?>("UpdateTime")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ID");
+                    b.HasKey("ContractID", "PopID");
 
                     b.HasIndex("PopID");
-
-                    b.HasIndex("ContractID", "PopID")
-                        .IsUnique();
 
                     b.ToTable("contract_Pops");
                 });
@@ -435,7 +432,13 @@ namespace PopMS.DataAccess.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<Guid>("ContractPopContractID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("ContractPopID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ContractPopPopID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CreateBy")
@@ -447,9 +450,6 @@ namespace PopMS.DataAccess.Migrations
 
                     b.Property<int>("OrderQty")
                         .HasColumnType("int");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
 
                     b.Property<int>("RecQty")
                         .HasColumnType("int");
@@ -476,7 +476,7 @@ namespace PopMS.DataAccess.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("ContractPopID");
+                    b.HasIndex("ContractPopContractID", "ContractPopPopID");
 
                     b.ToTable("order_Pops");
                 });
@@ -1393,7 +1393,7 @@ namespace PopMS.DataAccess.Migrations
                 {
                     b.HasOne("PopMS.Model.contract_pop", "ContractPop")
                         .WithMany()
-                        .HasForeignKey("ContractPopID")
+                        .HasForeignKey("ContractPopContractID", "ContractPopPopID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

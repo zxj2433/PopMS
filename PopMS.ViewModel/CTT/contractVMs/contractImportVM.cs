@@ -42,6 +42,7 @@ namespace PopMS.ViewModel.CTT.contractVMs
             foreach (var item in EntityList)
             {
                 item.DCID = DC.Set<user>().Where(r => r.ID == LoginUserInfo.Id).FirstOrDefault().DCID.Value;
+                item.ImportTime = DateTime.Now;
             }
             return base.BatchSaveData();
         }

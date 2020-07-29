@@ -35,6 +35,7 @@ namespace PopMS.ViewModel.ShipOrder.ship_popVMs
         {
             return new List<GridColumn<ship_pop_View>>{
                 this.MakeGridHeader(x => x.CreateTime),
+                this.MakeGridHeader(x=>x.DeptName),
                 this.MakeGridHeader(x => x.CodeAndName_view),
                 this.MakeGridHeader(x => x.PopName_view),
                 this.MakeGridHeader(x => x.OrderQty),
@@ -64,7 +65,8 @@ namespace PopMS.ViewModel.ShipOrder.ship_popVMs
                     ShipUser = x.ShipUser,
                     ShipTime = x.ShipTime,
                     CreateTime=x.CreateTime,
-                    OrderRemark_view=x.Ship_Pop_Sum.OrderRemark
+                    DeptName=x.User.Dept.DeptName,
+                    OrderRemark_view =x.Ship_Pop_Sum.OrderRemark
                 })
                 .OrderBy(x => x.ID);
             var data = query.ToList();
@@ -88,6 +90,7 @@ namespace PopMS.ViewModel.ShipOrder.ship_popVMs
                 return Status == ShipStatus.NEW ? "true" : "false";
             }
         }
-
+        [Display(Name ="部门")]
+        public string DeptName { get; set; }
     }
 }

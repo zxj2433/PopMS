@@ -14,6 +14,7 @@ namespace PopMS.Model
         [Required]
         public Guid GroupID { get; set; }
         [Display(Name = "物料编号")]
+        [NotMapped]
         public string PopNo
         {
             get
@@ -22,7 +23,7 @@ namespace PopMS.Model
             }
         }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int? PopIndex { get; set; }
+        public int PopIndex { get; set; }
         [Display(Name = "物料名称")]
         [StringLength(100)]
         [Required]
