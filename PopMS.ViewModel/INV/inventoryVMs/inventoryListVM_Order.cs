@@ -45,6 +45,8 @@ namespace PopMS.ViewModel.INV.inventoryVMs
         {
             var query = DC.Set<order_pop>()
                 .Include("ContractPop.Pop")
+                .Include("ContractPop.Contract")
+                .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.ContractPop.Contract.DCID)
                 .CheckEqual(Searcher.GroupID, x => x.ContractPop.Pop.GroupID)
                 .GroupBy(x=> new { x.ContractPop.PopID, x.ContractPop.Pop.PopIndex, x.ContractPop.Pop.PopName, x.ContractPop.UnitPack, x.ContractPop.Cnt })
                 .Select(x => new inventory_View

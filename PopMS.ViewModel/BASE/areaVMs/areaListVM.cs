@@ -40,6 +40,7 @@ namespace PopMS.ViewModel.BASE.areaVMs
         public override IOrderedQueryable<area_View> GetSearchQuery()
         {
             var query = DC.Set<area>()
+                .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.DCID)
                 .CheckContain(Searcher.Area, x=>x.Area)
                 .Select(x => new area_View
                 {

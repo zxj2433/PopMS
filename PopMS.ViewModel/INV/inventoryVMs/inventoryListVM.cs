@@ -33,6 +33,7 @@ namespace PopMS.ViewModel.INV.inventoryVMs
         protected override IEnumerable<IGridColumn<inventory_View>> InitGridHeader()
         {
             return new List<GridColumn<inventory_View>>{
+                this.MakeGridHeader(x => x.DCName_VIew),
                 this.MakeGridHeader(x => x.Location_view),
                 this.MakeGridHeader(x => x.PopName),
                 this.MakeGridHeader(x => x.Pack),
@@ -52,11 +53,14 @@ namespace PopMS.ViewModel.INV.inventoryVMs
         public override IOrderedQueryable<inventory_View> GetSearchQuery()
         {
             var query = DC.Set<inventoryIn>()
+                .Include("Inv.Location.Area")
+                .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.Inv.Location.Area.DCID)
                 .CheckEqual(Searcher.LocationID, x => x.Inv.LocationID)
                 .CheckEqual(Searcher.PopID,x=>x.OrderPop.ContractPop.PopID)
                 .Select(x => new inventory_View
                 {
                     ID = x.Inv.ID,
+                    DCName_VIew=x.Inv.Location.Area.DC.Name,
                     Location_view = x.Inv.Location.Location,
                     PopName = x.OrderPop.ContractPop.Pop.PopName,
                     OutDate = x.Inv.InvOut.Max(r => r.CreateTime),
@@ -78,6 +82,8 @@ namespace PopMS.ViewModel.INV.inventoryVMs
 
     public class inventory_View : inventory
     {
+        [Display(Name ="仓库")]
+        public string DCName_VIew { get; set; }
         [Display(Name = "货位")]
         public String Location_view { get; set; }
         [Display(Name = "批次")]

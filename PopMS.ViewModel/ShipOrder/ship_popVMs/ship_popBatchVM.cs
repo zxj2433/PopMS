@@ -19,7 +19,7 @@ namespace PopMS.ViewModel.ShipOrder.ship_popVMs
         }
         public bool ShipPop()
         {
-            var pops = DC.Set<ship_pop>().Where(r => Ids.Select(x => Guid.Parse(x)).Contains(r.ID));
+            var pops = DC.Set<ship_pop>().Where(r => Ids.Select(x => Guid.Parse(x)).Contains(r.ID)).Where(r=>r.Status==ShipStatus.ING);
             foreach (var item in pops)
             {
                 item.Status = ShipStatus.FINISH;

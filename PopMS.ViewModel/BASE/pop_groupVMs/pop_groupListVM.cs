@@ -41,6 +41,7 @@ namespace PopMS.ViewModel.BASE.pop_groupVMs
         public override IOrderedQueryable<pop_group_View> GetSearchQuery()
         {
             var query = DC.Set<pop_group>()
+                .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.DCID)
                 .CheckEqual(Searcher.DCID, x=>x.DCID)
                 .Select(x => new pop_group_View
                 {

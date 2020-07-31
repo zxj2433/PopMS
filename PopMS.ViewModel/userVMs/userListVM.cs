@@ -49,11 +49,11 @@ namespace PopMS.ViewModel.userVMs
                 ColumnFormatInfo.MakeViewButton(ButtonTypesEnum.Button,entity.PhotoId,640,480),
             };
         }
-
-
         public override IOrderedQueryable<user_View> GetSearchQuery()
         {
             var query = DC.Set<user>()
+                .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.DCID)
+                .CheckEqual(Searcher.DCID,x=>x.DCID)
                 .CheckEqual(Searcher.DeptID, x=>x.DeptID)
                 .CheckContain(Searcher.ITCode, x=>x.ITCode)
                 .CheckEqual(Searcher.IsValid, x=>x.IsValid)

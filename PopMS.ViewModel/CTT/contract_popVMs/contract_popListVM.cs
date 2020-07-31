@@ -32,6 +32,7 @@ namespace PopMS.ViewModel.CTT.contract_popVMs
         protected override IEnumerable<IGridColumn<contract_pop_View>> InitGridHeader()
         {
             return new List<GridColumn<contract_pop_View>>{
+                this.MakeGridHeader(x=>x.DCName),
                 this.MakeGridHeader(x => x.Name_view),
                 this.MakeGridHeader(x => x.PopName_view),
                 this.MakeGridHeader(x => x.UnitPack),
@@ -46,11 +47,14 @@ namespace PopMS.ViewModel.CTT.contract_popVMs
         public override IOrderedQueryable<contract_pop_View> GetSearchQuery()
         {
             var query = DC.Set<contract_pop>()
+                .Include("Contract")
+                .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.Contract.DCID)
                 .CheckEqual(Searcher.PopID, x=>x.PopID)
                 .CheckEqual(Searcher.ContractID, x=>x.ContractID)
                 .Select(x => new contract_pop_View
                 {
 				    ID = x.ID,
+                    DCName=x.Contract.DC.Name,
                     PopName_view = x.Pop.PopName,
                     UnitPack = x.UnitPack,
                     Cnt = x.Cnt,
@@ -74,5 +78,7 @@ namespace PopMS.ViewModel.CTT.contract_popVMs
         public int OrderedQty { get; set; }
         [Display(Name = "已发放数量")]
         public int ShippedQty { get; set; }
+        [Display(Name ="仓库")]
+        public string DCName { get; set; }
     }
 }

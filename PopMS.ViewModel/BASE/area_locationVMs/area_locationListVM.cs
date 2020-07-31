@@ -41,6 +41,8 @@ namespace PopMS.ViewModel.BASE.area_locationVMs
         public override IOrderedQueryable<area_location_View> GetSearchQuery()
         {
             var query = DC.Set<area_location>()
+                .Include("Area")
+                .DPWhere(LoginUserInfo?.DataPrivileges, x => x.Area.DCID)
                 .CheckEqual(Searcher.AreaID, x=>x.AreaID)
                 .CheckEqual(Searcher.isMix, x=>x.isMix)
                 .Select(x => new area_location_View

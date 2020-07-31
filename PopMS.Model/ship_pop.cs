@@ -14,11 +14,6 @@ namespace PopMS.Model
         [Display(Name ="新建")]
         NEW,
         /// <summary>
-        /// 已取消
-        /// </summary>
-        [Display(Name = "已取消")]
-        CANCEL,
-        /// <summary>
         /// 正在发放
         /// </summary>
         [Display(Name = "正在发放")]

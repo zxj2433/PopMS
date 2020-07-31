@@ -12,6 +12,11 @@ using WalkingTec.Mvvm.Core.Extensions;
 using WalkingTec.Mvvm.Core.Auth;
 using WalkingTec.Mvvm.Mvc;
 using PopMS.ViewModel.HomeVMs;
+using System.Security.Policy;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using Microsoft.Extensions.Hosting.Internal;
 
 namespace PopMS.Controllers
 {
@@ -105,27 +110,55 @@ namespace PopMS.Controllers
             else
                 return Json("No Data");
         }
-
-        [AllowAnonymous]
-        [ResponseCache(Duration = 3600)]
-        public github GetGithubInfo()
+        [Public]
+        public IActionResult Download(string name)
         {
-            var rv = ReadFromCache<github>("githubinfo", () =>
-            {
-                var s = ConfigInfo.Domains["github"].CallAPI<github>("repos/dotnetcore/wtm", null, null, 60).Result;
-                return s;
-            }, 1800);
-
-            return rv;
+            var s = Directory.GetCurrentDirectory();
+            string Path = string.Format(ConfigInfo.AppSettings[name], s);
+            string filename = System.IO.Path.GetFileName(Path);
+            //FileStream fs = System.IO.File.Open(Path, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+            //fs.Position = 0;
+            return File(Path, "application/text", filename);
+        }
+        [Public]
+        public IActionResult PalyVideo()
+        {
+            var s = Directory.GetCurrentDirectory();
+            string Path =string.Format(ConfigInfo.AppSettings["VedioPath"],s);
+            FileStream fs = System.IO.File.Open(Path, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+            fs.Position = 0;
+            return File(fs,"Vedio/mp4","物料管理系统培训视频.mp4");
+        }
+        [Public]
+        public IActionResult SOPWord()
+        {
+            var s = Directory.GetCurrentDirectory();
+            string Path =string.Format(ConfigInfo.AppSettings["SOPPath"],s);
+            FileStream fs = System.IO.File.Open(Path, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+            fs.Position = 0;
+            return File(fs, "application/octet-stream", "SOP.rar");
         }
 
-        public class github
-        {
-            public int stargazers_count { get; set; }
-            public int forks_count { get; set; }
-            public int subscribers_count { get; set; }
-            public int open_issues_count { get; set; }
-        }
+        //[AllowAnonymous]
+        //[ResponseCache(Duration = 3600)]
+        //public github GetGithubInfo()
+        //{
+        //    var rv = ReadFromCache<github>("githubinfo", () =>
+        //    {
+        //        var s = ConfigInfo.Domains["github"].CallAPI<github>("repos/dotnetcore/wtm", null, null, 60).Result;
+        //        return s;
+        //    }, 1800);
+
+        //    return rv;
+        //}
+
+        //public class github
+        //{
+        //    public int stargazers_count { get; set; }
+        //    public int forks_count { get; set; }
+        //    public int subscribers_count { get; set; }
+        //    public int open_issues_count { get; set; }
+        //}
 
     }
 }

@@ -34,6 +34,7 @@ namespace PopMS.ViewModel.INV.inventoryVMs
         protected override IEnumerable<IGridColumn<inventory_View>> InitGridHeader()
         {
             return new List<GridColumn<inventory_View>>{
+                this.MakeGridHeader(x => x.DCName_VIew),
                 this.MakeGridHeader(x => x.PopName),
                 this.MakeGridHeader(x => x.OrderQty),
                 this.MakeGridHeader(x => x.TotalPrice),
@@ -84,6 +85,7 @@ namespace PopMS.ViewModel.INV.inventoryVMs
                         from OUT in OUTs.DefaultIfEmpty()
                         select new inventory_View
                         {
+                            DCName_VIew=x.Group.DC.Name,
                             ID = x.ID,
                             PopGroup = x.Group.Name,
                             PopName = x.PopName,

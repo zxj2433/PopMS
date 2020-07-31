@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using WalkingTec.Mvvm.Core;
 using WalkingTec.Mvvm.Core.Extensions;
 using PopMS.Model;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace PopMS.ViewModel.ShipOrder.ship_pop_sumVMs
 {
@@ -30,13 +30,13 @@ namespace PopMS.ViewModel.ShipOrder.ship_pop_sumVMs
             {
                 item.Status = ShipStatus.ING;
                 item.Ship_Pop_SumID = Entity.ID;
-                var Invs = DC.Set<inventoryIn>().Where(r => r.OrderPop.ContractPop.PopID == item.PopID).Select(r=>r.Inv).ToList();
+                var Invs = DC.Set<inventoryIn>().Include("Inv").Where(r => r.OrderPop.ContractPop.PopID == item.PopID).Select(r=>r.Inv).ToList();
                 Invs = Invs.OrderBy(r => r.PutTime).ToList();
                 foreach (var inv in Invs)
                 {
                     if(item.OrderQty>item.AlcQty)
                     {
-                        int AlcQty = Math.Min(inv.Stock - inv.UsedQty, item.OrderQty.Value - item.AlcQty);
+                        int AlcQty = Math.Min(inv.Stock - inv.UsedQty,item.OrderQty.Value - item.AlcQty);
                         inv.UsedQty += AlcQty;
                         item.AlcQty += AlcQty;
                         inventoryOut InvOut = new inventoryOut
@@ -70,7 +70,7 @@ namespace PopMS.ViewModel.ShipOrder.ship_pop_sumVMs
 
         public override void DoDelete()
         {
-            base.DoDelete();
+            //base.DoDelete();
         }
     }
 }

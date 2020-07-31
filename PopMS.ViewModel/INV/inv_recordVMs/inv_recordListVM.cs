@@ -29,6 +29,7 @@ namespace PopMS.ViewModel.INV.inv_recordVMs
         protected override IEnumerable<IGridColumn<inv_record_View>> InitGridHeader()
         {
             return new List<GridColumn<inv_record_View>>{
+                this.MakeGridHeader(x => x.DCName),
                 this.MakeGridHeader(x => x.Type),
                 this.MakeGridHeader(x => x.PopName),
                 this.MakeGridHeader(x => x.FromLocation),
@@ -43,13 +44,16 @@ namespace PopMS.ViewModel.INV.inv_recordVMs
         public override IOrderedQueryable<inv_record_View> GetSearchQuery()
         {
             var query = DC.Set<inv_record>()
+                .Include("FromLoc.Area")
+                .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.FromLoc.Area.DCID)
                 .CheckEqual(Searcher.Type, x=>x.Type)
                 .CheckContain(Searcher.UserName, x=>x.UserName)
                 .CheckBetween(Searcher.UpdateTime?.GetStartTime(), Searcher.UpdateTime?.GetEndTime(), x => x.UpdateTime, includeMax: false)
                 .Select(x => new inv_record_View
                 {
 				    ID = x.ID,
-                    PopName=x.Inv.InvIn.First().OrderPop.ContractPop.Pop.PopName,
+                    DCName=x.FromLoc.Area.DC.Name,
+                    PopName =x.Inv.InvIn.First().OrderPop.ContractPop.Pop.PopName,
                     FromLocation = x.FromLoc.Location,
                     Type = x.Type,
                     Location_view = x.ToLoc.Location,
@@ -72,6 +76,8 @@ namespace PopMS.ViewModel.INV.inv_recordVMs
         public string PopName { get; set; }
         [Display(Name ="操作时间")]
         public string Time { get; set; }
+        [Display(Name ="仓库")]
+        public string DCName { get; set; }
 
     }
 }

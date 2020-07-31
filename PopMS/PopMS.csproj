@@ -12,6 +12,7 @@
 
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
     <PackageReference Include="WalkingTec.Mvvm.TagHelpers.LayUI" Version="3.6.8" />
     <PackageReference Include="WalkingTec.Mvvm.Mvc.Admin" Version="3.6.8" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
@@ -22,7 +23,11 @@
    <ProjectReference Include="..\PopMS.Model\PopMS.Model.csproj" />
     <ProjectReference Include="..\PopMS.DataAccess\PopMS.DataAccess.csproj" />
     <ProjectReference Include="..\PopMS.ViewModel\PopMS.ViewModel.csproj" />
- </ItemGroup >
+ </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\files\" />
+  </ItemGroup>
 </Project>
 
 

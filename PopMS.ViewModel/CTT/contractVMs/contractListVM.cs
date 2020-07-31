@@ -49,6 +49,7 @@ namespace PopMS.ViewModel.CTT.contractVMs
         public override IOrderedQueryable<contract_View> GetSearchQuery()
         {
             var query = DC.Set<contract>()
+                .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.DCID)
                 .CheckEqual(Searcher.DCID, x=>x.DCID)
                 .CheckContain(Searcher.Name, x=>x.Name)
                 .CheckContain(Searcher.Vendor, x=>x.Vendor)

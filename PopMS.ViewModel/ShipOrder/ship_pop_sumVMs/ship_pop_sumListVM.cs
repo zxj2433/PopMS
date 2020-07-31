@@ -31,6 +31,7 @@ namespace PopMS.ViewModel.ShipOrder.ship_pop_sumVMs
         protected override IEnumerable<IGridColumn<ship_pop_sum_View>> InitGridHeader()
         {
             return new List<GridColumn<ship_pop_sum_View>>{
+                this.MakeGridHeader(x=>x.DCName),
                 this.MakeGridHeader(x => x.OrderDate),
                 this.MakeGridHeader(x => x.OrderRemark),
                  this.MakeGridHeader(x => x.PopName),
@@ -56,9 +57,12 @@ namespace PopMS.ViewModel.ShipOrder.ship_pop_sumVMs
             else
             {
                 var query = DC.Set<inventoryOut>()
+                    .Include("Inv.Location.Area")
+                    .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.Inv.Location.Area.DCID)
                         .CheckBetween(Searcher.OrderDate?.GetStartTime(), Searcher.OrderDate?.GetEndTime(), x => x.sp.Ship_Pop_Sum.OrderDate)
                         .CheckEqual(Searcher.Status, x => x.sp.Status)
                         .GroupBy(x => new {
+                            x.sp.Pop.Group.DC.Name,
                             x.sp.Ship_Pop_SumID,
                             x.sp.Ship_Pop_Sum.OrderDate,
                             x.sp.Ship_Pop_Sum.OrderRemark,
@@ -68,6 +72,7 @@ namespace PopMS.ViewModel.ShipOrder.ship_pop_sumVMs
                         .Select(x => new ship_pop_sum_View
                         {
                             ID = x.Key.Ship_Pop_SumID.Value,
+                            DCName=x.Key.Name,
                             OrderDate = x.Key.OrderDate,
                             OrderRemark = x.Key.OrderRemark,
                             PopName = x.Key.PopName,
@@ -87,5 +92,7 @@ namespace PopMS.ViewModel.ShipOrder.ship_pop_sumVMs
         public string Location { get; set; }
         [Display(Name = "拣货数量")]
         public int PickQty { get; set; }
+        [Display(Name ="仓库")]
+        public string DCName { get; set; }
     }
 }

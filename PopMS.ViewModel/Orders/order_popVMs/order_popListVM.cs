@@ -32,6 +32,7 @@ namespace PopMS.ViewModel.Orders.order_popVMs
         protected override IEnumerable<IGridColumn<order_pop_View>> InitGridHeader()
         {
             return new List<GridColumn<order_pop_View>>{
+                this.MakeGridHeader(x=>x.DCName),
                 this.MakeGridHeader(x => x.ContractName),
                 this.MakeGridHeader(x => x.PopName),
                 this.MakeGridHeader(x=>x.UnitPack),
@@ -58,6 +59,7 @@ namespace PopMS.ViewModel.Orders.order_popVMs
                 .Select(x => new order_pop_View
                 {
 				    ID = x.ID,
+                    DCName=x.ContractPop.Contract.DC.Name,
                     PopName = x.ContractPop.Pop.PopName,
                     ContractName=x.ContractPop.Contract.Name,
                     UnitCost=x.ContractPop.Price,
@@ -100,6 +102,8 @@ namespace PopMS.ViewModel.Orders.order_popVMs
                 return UnitCost * RecQty;
             }
         }
+        [Display(Name ="仓库")]
+        public string DCName { get; set; }
 
     }
 }

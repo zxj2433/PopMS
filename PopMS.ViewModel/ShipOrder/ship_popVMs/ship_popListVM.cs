@@ -35,6 +35,7 @@ namespace PopMS.ViewModel.ShipOrder.ship_popVMs
         {
             return new List<GridColumn<ship_pop_View>>{
                 this.MakeGridHeader(x => x.CreateTime),
+                this.MakeGridHeader(x=>x.DCName),
                 this.MakeGridHeader(x=>x.DeptName),
                 this.MakeGridHeader(x => x.CodeAndName_view),
                 this.MakeGridHeader(x => x.PopName_view),
@@ -58,6 +59,7 @@ namespace PopMS.ViewModel.ShipOrder.ship_popVMs
                 .Select(x => new ship_pop_View
                 {
 				    ID = x.ID,
+                    DCName=x.Pop.Group.DC.Name,
                     CodeAndName_view = x.User.CodeAndName,
                     PopName_view = x.Pop.PopName,
                     OrderQty = x.OrderQty,
@@ -92,5 +94,7 @@ namespace PopMS.ViewModel.ShipOrder.ship_popVMs
         }
         [Display(Name ="部门")]
         public string DeptName { get; set; }
+        [Display(Name ="仓库")]
+        public string DCName { get; set; }
     }
 }
