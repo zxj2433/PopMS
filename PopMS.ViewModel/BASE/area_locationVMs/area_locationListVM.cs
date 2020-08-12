@@ -31,6 +31,7 @@ namespace PopMS.ViewModel.BASE.area_locationVMs
         protected override IEnumerable<IGridColumn<area_location_View>> InitGridHeader()
         {
             return new List<GridColumn<area_location_View>>{
+                this.MakeGridHeader(x => x.DCName),
                 this.MakeGridHeader(x => x.Area_view),
                 this.MakeGridHeader(x => x.Location),
                 this.MakeGridHeader(x => x.isMix),
@@ -45,14 +46,16 @@ namespace PopMS.ViewModel.BASE.area_locationVMs
                 .DPWhere(LoginUserInfo?.DataPrivileges, x => x.Area.DCID)
                 .CheckEqual(Searcher.AreaID, x=>x.AreaID)
                 .CheckEqual(Searcher.isMix, x=>x.isMix)
+                .CheckEqual(Searcher.DCID,x=>x.Area.DCID)
                 .Select(x => new area_location_View
                 {
 				    ID = x.ID,
+                    DCName=x.Area.DC.Name,
                     Area_view = x.Area.Area,
                     Location = x.Location,
                     isMix = x.isMix,
                 })
-                .OrderBy(x => x.Area_view).ThenBy(x=>x.Location);
+                .OrderBy(x => x.DCName).ThenBy(x => x.Area_view).ThenBy(x=>x.Location);
             return query;
         }
 
@@ -61,6 +64,8 @@ namespace PopMS.ViewModel.BASE.area_locationVMs
     public class area_location_View : area_location{
         [Display(Name = "区域")]
         public String Area_view { get; set; }
+        [Display(Name ="仓库")]
+        public string DCName { get; set; }
 
     }
 }

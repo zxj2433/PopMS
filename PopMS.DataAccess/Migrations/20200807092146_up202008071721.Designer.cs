@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PopMS.DataAccess;
 
 namespace PopMS.DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200807092146_up202008071721")]
+    partial class up202008071721
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -539,6 +541,10 @@ namespace PopMS.DataAccess.Migrations
                     b.HasIndex("GroupID");
 
                     b.HasIndex("ImageID");
+
+                    b.HasIndex("OutID")
+                        .IsUnique()
+                        .HasFilter("[OutID] IS NOT NULL");
 
                     b.HasIndex("PopIndex")
                         .IsUnique();

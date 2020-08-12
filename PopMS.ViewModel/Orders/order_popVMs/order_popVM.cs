@@ -51,9 +51,9 @@ namespace PopMS.ViewModel.Orders.order_popVMs
 
         public override void DoAdd()
         {
-            var MaxCost = DC.Set<contract_pop>()
+            var Ctt = DC.Set<contract_pop>()
                 .Include("Contract")
-                .Where(r => r.ID == Entity.ContractPopID).FirstOrDefault().Contract.MaxCost;
+                .Where(r => r.ID == Entity.ContractPopID).FirstOrDefault().Contract;
             //var MaxCost = DC.Set<contract>().Where(r => r.ID == OrderPop.ContractPop.ContractID).FirstOrDefault().MaxCost;
             var CurQty = DC.Set<order_pop>()
                 .Include("ContractPop")
@@ -62,9 +62,14 @@ namespace PopMS.ViewModel.Orders.order_popVMs
             var Price= DC.Set<contract_pop>()
                 .Include("Contract")
                 .Where(r => r.ID == Entity.ContractPopID).FirstOrDefault().Price;
-            if (MaxCost > 0 && (CurQty+Entity.OrderQty)*Price>MaxCost)
+            if (Ctt.MaxCost > 0 && (CurQty+Entity.OrderQty)*Price> Ctt.MaxCost)
             {
                 MSD.AddModelError("OverCost", "合同订货金额超出最大限制");
+                return;
+            }
+            if(Ctt.StartDate>DateTime.Now.Date&&Ctt.EndDate<DateTime.Now.Date)
+            {
+                MSD.AddModelError("OverDate", "已经不再合同订购期内，无法订货");
                 return;
             }
             Entity.Price = Price;

@@ -68,11 +68,9 @@ namespace PopMS.ViewModel.INV.inventoryVMs
                     UsedQty = x.Inv.InvOut.Sum(r=>r.sp.AlcQty),
                     PutUser = x.Inv.PutUser,
                     PutTime = x.Inv.PutTime,
+                    Price=x.OrderPop.Price,
                     Pack = x.OrderPop.ContractPop.UnitPack,
-                    Cnt = x.OrderPop.ContractPop.Cnt,
-                    Price = x.OrderPop.ContractPop.Price,
-                    TotalPrice= x.OrderPop.ContractPop.Price * x.Inv.Stock,
-                    UsedPrice= x.OrderPop.ContractPop.Price *x.Inv.InvOut.Sum(r=>r.sp.AlcQty)
+                    Cnt = x.OrderPop.ContractPop.Cnt
                 })
                 .OrderBy(x => x.PopName);
             return query;

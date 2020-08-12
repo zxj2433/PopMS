@@ -37,7 +37,8 @@ namespace PopMS.DataAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<pop>(e => e.HasIndex("PopIndex").IsUnique());
-            modelBuilder.Entity<contract>(e => e.HasIndex("ContractID").IsUnique());
+            //modelBuilder.Entity<pop>(e => e.HasIndex("OutID").IsUnique());
+            modelBuilder.Entity<contract>(e => e.HasIndex(x=>new {x.DCID,x.ContractID}).IsUnique());
             modelBuilder.Entity<contract_pop>(e => e.HasIndex(x => new { x.ContractID, x.PopID }).IsUnique());
             base.OnModelCreating(modelBuilder);
         }

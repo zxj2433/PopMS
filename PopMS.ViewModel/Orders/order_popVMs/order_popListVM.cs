@@ -39,11 +39,8 @@ namespace PopMS.ViewModel.Orders.order_popVMs
                 this.MakeGridHeader(x => x.CreateBy),
                 this.MakeGridHeader(x => x.CreateTime),
                 this.MakeGridHeader(x => x.Status),
-                this.MakeGridHeader(x => x.UnitCost),
                 this.MakeGridHeader(x => x.OrderQty),
-                this.MakeGridHeader(x => x.TotalCost),
                 this.MakeGridHeader(x => x.RecQty),
-                this.MakeGridHeader(x => x.RecCost),
                 this.MakeGridHeaderAction(width: 150)
             };
         }

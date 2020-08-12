@@ -16,7 +16,6 @@ namespace PopMS.ViewModel.BASE.pop_groupVMs
 
         public pop_groupVM()
         {
-            SetInclude(x => x.DC);
         }
 
         protected override void InitVM()

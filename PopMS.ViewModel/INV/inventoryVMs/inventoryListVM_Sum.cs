@@ -34,12 +34,9 @@ namespace PopMS.ViewModel.INV.inventoryVMs
         protected override IEnumerable<IGridColumn<inventory_View>> InitGridHeader()
         {
             return new List<GridColumn<inventory_View>>{
-                this.MakeGridHeader(x => x.DCName_VIew),
                 this.MakeGridHeader(x => x.PopName),
                 this.MakeGridHeader(x => x.OrderQty),
-                this.MakeGridHeader(x => x.TotalPrice),
                 this.MakeGridHeader(x => x.UsedQty),
-                this.MakeGridHeader(x => x.UsedPrice),
                 this.MakeGridHeader(x => x.OnHandQty),
                 this.MakeGridHeader(x => x.EnableQty),
                 this.MakeGridHeader(x => x.InDate),
@@ -52,7 +49,6 @@ namespace PopMS.ViewModel.INV.inventoryVMs
         {
             var Query = from x in DC.Set<pop>().AsNoTracking()
                         .Include("Group")
-                        .DPWhere(LoginUserInfo?.DataPrivileges, x => x.Group.DCID)
                         .CheckEqual(Searcher.PopID, x => x.ID)
                         join I in DC.Set<order_pop>().AsNoTracking()
                         .Include("ContractPop").Include("ContractPop.Contract")
@@ -64,7 +60,6 @@ namespace PopMS.ViewModel.INV.inventoryVMs
                         {
                             ContractPopID = x.Key,
                             OrderQty = x.Sum(x => x.OrderQty),
-                            Price = x.Sum(x => x.OrderQty*x.Price),
                             RecQty = x.Sum(x => x.RecQty),
                             RecTime = x.Max(x => x.RecTime)
                         })
@@ -85,7 +80,6 @@ namespace PopMS.ViewModel.INV.inventoryVMs
                         from OUT in OUTs.DefaultIfEmpty()
                         select new inventory_View
                         {
-                            DCName_VIew=x.Group.DC.Name,
                             ID = x.ID,
                             PopGroup = x.Group.Name,
                             PopName = x.PopName,
@@ -94,8 +88,7 @@ namespace PopMS.ViewModel.INV.inventoryVMs
                             OrderQty = IN.OrderQty,
                             OnHandQty=IN.OrderQty-IN.RecQty,
                             Stock=IN.RecQty,
-                            UsedQty = OUT.AlcQty,
-                            TotalPrice = IN.Price
+                            UsedQty = OUT.AlcQty
                         };
             return Query.AsQueryable().OrderBy(r=>r.PopName);
         }

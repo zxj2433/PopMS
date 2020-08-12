@@ -8,9 +8,6 @@ namespace PopMS.Model
 {
     public class pop_group:BasePoco
     {
-        public dc DC { get; set; }
-        [Display(Name = "仓库")]
-        public Guid DCID { get; set; }
         [Display(Name ="组别")]
         [StringLength(50)]
         [Required]

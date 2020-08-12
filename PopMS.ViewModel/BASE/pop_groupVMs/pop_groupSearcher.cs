@@ -12,13 +12,9 @@ namespace PopMS.ViewModel.BASE.pop_groupVMs
 {
     public partial class pop_groupSearcher : BaseSearcher
     {
-        public List<ComboSelectListItem> AllDCs { get; set; }
-        [Display(Name = "仓库")]
-        public Guid? DCID { get; set; }
 
         protected override void InitVM()
         {
-            AllDCs = DC.Set<dc>().GetSelectListItems(LoginUserInfo?.DataPrivileges, null, y => y.Name);
         }
 
     }

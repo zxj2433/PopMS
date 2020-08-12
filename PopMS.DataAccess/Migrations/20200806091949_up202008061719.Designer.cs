@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PopMS.DataAccess;
 
 namespace PopMS.DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200806091949_up202008061719")]
+    partial class up202008061719
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,8 +43,7 @@ namespace PopMS.DataAccess.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("DCID")
-                        .IsRequired()
+                    b.Property<Guid>("DCID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UpdateBy")
@@ -148,9 +149,11 @@ namespace PopMS.DataAccess.Migrations
 
                     b.HasIndex("ContractFileID");
 
-                    b.HasIndex("DCID", "ContractID")
+                    b.HasIndex("ContractID")
                         .IsUnique()
                         .HasFilter("[ContractID] IS NOT NULL");
+
+                    b.HasIndex("DCID");
 
                     b.ToTable("contracts");
                 });
@@ -496,16 +499,9 @@ namespace PopMS.DataAccess.Migrations
                     b.Property<Guid>("GroupID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ImageID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("OutID")
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
-
-                    b.Property<string>("Pack")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
 
                     b.Property<int>("PopIndex")
                         .ValueGeneratedOnAdd()
@@ -517,19 +513,12 @@ namespace PopMS.DataAccess.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<string>("Unit")
-                        .HasColumnType("nvarchar(20)")
-                        .HasMaxLength(20);
-
                     b.Property<string>("UpdateBy")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<DateTime?>("UpdateTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<double>("Weight")
-                        .HasColumnType("float");
 
                     b.Property<int?>("index")
                         .HasColumnType("int");
@@ -538,7 +527,9 @@ namespace PopMS.DataAccess.Migrations
 
                     b.HasIndex("GroupID");
 
-                    b.HasIndex("ImageID");
+                    b.HasIndex("OutID")
+                        .IsUnique()
+                        .HasFilter("[OutID] IS NOT NULL");
 
                     b.HasIndex("PopIndex")
                         .IsUnique();
@@ -1419,10 +1410,6 @@ namespace PopMS.DataAccess.Migrations
                         .HasForeignKey("GroupID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("WalkingTec.Mvvm.Core.FileAttachment", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageID");
                 });
 
             modelBuilder.Entity("PopMS.Model.ship_pop", b =>

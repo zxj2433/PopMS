@@ -24,12 +24,17 @@ namespace PopMS.ViewModel.INV.inventoryVMs
 
         [Display(Name = "物料类型")]
         public Guid? GroupID { get; set; }
+        public List<ComboSelectListItem> AllDCs { get; set; }
+
+        [Display(Name = "仓库")]
+        public Guid? DCID { get; set; }
 
         protected override void InitVM()
         {
             AllLocations = DC.Set<area_location>().GetSelectListItems(LoginUserInfo?.DataPrivileges, null, y => y.Location);
             AllPops = DC.Set<pop>().GetSelectListItems(LoginUserInfo?.DataPrivileges, null, y => y.PopNoName);
             AllGroups=DC.Set<pop_group>().GetSelectListItems(LoginUserInfo?.DataPrivileges, null, y => y.Name);
+            AllDCs = DC.Set<dc>().GetSelectListItems(LoginUserInfo?.DataPrivileges, null, x => x.Name);
         }
 
     }

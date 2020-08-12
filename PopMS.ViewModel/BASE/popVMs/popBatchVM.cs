@@ -25,11 +25,12 @@ namespace PopMS.ViewModel.BASE.popVMs
     /// </summary>
     public class pop_BatchEdit : BaseVM
     {
-        [Display(Name = "序号")]
-        public Int32? index { get; set; }
+        public List<ComboSelectListItem> AllGroups { get; set; }
+        public Guid? GroupID { get; set; }
 
         protected override void InitVM()
         {
+            AllGroups = DC.Set<pop_group>().GetSelectListItems(LoginUserInfo?.DataPrivileges, null, y => y.Name);
         }
 
     }

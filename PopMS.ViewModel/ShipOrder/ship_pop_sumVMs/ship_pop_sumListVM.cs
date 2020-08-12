@@ -62,7 +62,7 @@ namespace PopMS.ViewModel.ShipOrder.ship_pop_sumVMs
                         .CheckBetween(Searcher.OrderDate?.GetStartTime(), Searcher.OrderDate?.GetEndTime(), x => x.sp.Ship_Pop_Sum.OrderDate)
                         .CheckEqual(Searcher.Status, x => x.sp.Status)
                         .GroupBy(x => new {
-                            x.sp.Pop.Group.DC.Name,
+                            x.sp.User.DC.Name,
                             x.sp.Ship_Pop_SumID,
                             x.sp.Ship_Pop_Sum.OrderDate,
                             x.sp.Ship_Pop_Sum.OrderRemark,

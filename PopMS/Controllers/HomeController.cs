@@ -136,7 +136,7 @@ namespace PopMS.Controllers
             string Path =string.Format(ConfigInfo.AppSettings["SOPPath"],s);
             FileStream fs = System.IO.File.Open(Path, System.IO.FileMode.Open, System.IO.FileAccess.Read);
             fs.Position = 0;
-            return File(fs, "application/octet-stream", "SOP.rar");
+            return File(fs, "application/octet-stream", "培训手册.rar");
         }
 
         //[AllowAnonymous]

@@ -31,35 +31,55 @@ namespace PopMS.ViewModel.BASE.popVMs
         protected override IEnumerable<IGridColumn<pop_View>> InitGridHeader()
         {
             return new List<GridColumn<pop_View>>{
-                this.MakeGridHeader(x => x.GroupName),
+                this.MakeGridHeader(x => x.Name_view),
                 this.MakeGridHeader(x => x.PopNo),
+                this.MakeGridHeader(x => x.OutID),
                 this.MakeGridHeader(x => x.PopName),
+                this.MakeGridHeader(x => x.index),
+                this.MakeGridHeader(x => x.Pack),
+                this.MakeGridHeader(x => x.Unit),
+                this.MakeGridHeader(x => x.Weight),
+                this.MakeGridHeader(x => x.ImageID).SetFormat(ImageIDFormat),
                 this.MakeGridHeaderAction(width: 200)
             };
         }
+        private List<ColumnFormatInfo> ImageIDFormat(pop_View entity, object val)
+        {
+            return new List<ColumnFormatInfo>
+            {
+                ColumnFormatInfo.MakeDownloadButton(ButtonTypesEnum.Button,entity.ImageID),
+                ColumnFormatInfo.MakeViewButton(ButtonTypesEnum.Button,entity.ImageID,640,480),
+            };
+        }
+
 
         public override IOrderedQueryable<pop_View> GetSearchQuery()
         {
             var query = DC.Set<pop>()
-                .Include("Group")
-                .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.Group.DCID)
-                .CheckEqual(Searcher.PopGroup, x=>x.GroupID)
+                .CheckEqual(Searcher.GroupID, x=>x.GroupID)
+                .CheckContain(Searcher.PopName, x=>x.PopName)
                 .Select(x => new pop_View
                 {
 				    ID = x.ID,
+                    Name_view = x.Group.Name,
                     PopIndex = x.PopIndex,
+                    OutID = x.OutID,
                     PopName = x.PopName,
-                    index=x.index,
-                    GroupName=x.Group.Name
+                    index = x.index,
+                    Pack = x.Pack,
+                    Unit = x.Unit,
+                    Weight = x.Weight,
+                    ImageID = x.ImageID,
                 })
-                .OrderBy(x => x.GroupName).ThenBy(r=>r.index).ThenBy(r=>r.PopName);
+                .OrderBy(x => x.Name_view).ThenBy(x=>x.index).ThenBy(x=>x.PopName);
             return query;
         }
 
     }
 
     public class pop_View : pop{
-        [Display(Name ="物料类型")]
-        public string GroupName { get; set; }
+        [Display(Name = "组别")]
+        public String Name_view { get; set; }
+
     }
 }

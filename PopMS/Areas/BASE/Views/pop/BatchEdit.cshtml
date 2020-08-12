@@ -4,7 +4,7 @@
 <wt:form vm="@Model">
     <div style="margin-bottom:10px">@Model.Localizer["BatchEditConfirm"] </div>
 <wt:row items-per-row="ItemsPerRowEnum.Two">
-<wt:textbox field="LinkedVM.index" />
+<wt:combobox field="LinkedVM.GroupID" items="LinkedVM.AllGroups"/>
 </wt:row>
     <wt:hidden field="Ids" />
     <wt:grid vm="ListVM" use-local-data="true" height="300"  hidden-checkbox="true" hidden-panel="true"/>

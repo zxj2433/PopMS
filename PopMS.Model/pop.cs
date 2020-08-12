@@ -22,8 +22,12 @@ namespace PopMS.Model
                 return (10000 + PopIndex).ToString();
             }
         }
+        [Display(Name ="序号")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PopIndex { get; set; }
+        [Display(Name ="外部编码")]
+        [StringLength(20)]
+        public string OutID { get; set; }
         [Display(Name = "物料名称")]
         [StringLength(100)]
         [Required]
@@ -39,5 +43,17 @@ namespace PopMS.Model
                 return PopNo +"-"+ PopName;
             }
         }
+        [Display(Name ="规格")]
+        [StringLength(50)]
+        public string Pack { get; set; }
+        [Display(Name = "单位")]
+        [StringLength(20)]
+        public string Unit { get; set; }
+        [Display(Name ="重量")]
+        public double Weight { get; set; }
+        [Display(Name = "图片")]
+        public FileAttachment Image { get; set; }
+        [Display(Name ="图片")]
+        public Guid? ImageID { get; set; }
     }
 }

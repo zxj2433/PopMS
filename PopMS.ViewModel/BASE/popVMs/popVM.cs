@@ -13,15 +13,15 @@ namespace PopMS.ViewModel.BASE.popVMs
     public partial class popVM : BaseCRUDVM<pop>
     {
         public List<ComboSelectListItem> AllGroups { get; set; }
+
         public popVM()
         {
             SetInclude(x => x.Group);
-            SetInclude(x => x.Group.DC);
         }
 
         protected override void InitVM()
         {
-            AllGroups = DC.Set<pop_group>().GetSelectListItems(LoginUserInfo?.DataPrivileges, null, x => x.Name);
+            AllGroups = DC.Set<pop_group>().GetSelectListItems(LoginUserInfo?.DataPrivileges, null, y => y.Name);
         }
 
         public override void DoAdd()

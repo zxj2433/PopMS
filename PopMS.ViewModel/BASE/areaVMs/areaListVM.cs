@@ -31,6 +31,7 @@ namespace PopMS.ViewModel.BASE.areaVMs
         protected override IEnumerable<IGridColumn<area_View>> InitGridHeader()
         {
             return new List<GridColumn<area_View>>{
+                this.MakeGridHeader(x => x.DCName),
                 this.MakeGridHeader(x => x.Area),
                 this.MakeGridHeader(x => x.AreaRemark),
                 this.MakeGridHeaderAction(width: 200)
@@ -45,16 +46,17 @@ namespace PopMS.ViewModel.BASE.areaVMs
                 .Select(x => new area_View
                 {
 				    ID = x.ID,
+                    DCName=x.DC.Name,
                     Area = x.Area,
                     AreaRemark = x.AreaRemark,
                 })
-                .OrderBy(x => x.ID);
+                .OrderBy(x => x.DCName).ThenBy(x=>x.Area);
             return query;
         }
-
     }
 
     public class area_View : area{
-
+        [Display(Name ="仓库")]
+        public string DCName { get; set; }
     }
 }

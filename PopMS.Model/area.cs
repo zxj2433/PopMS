@@ -10,7 +10,8 @@ namespace PopMS.Model
     {
         public dc DC { get; set; }
         [Display(Name ="仓库")]
-        public Guid DCID { get; set; }
+        [Required]
+        public Guid? DCID { get; set; }
         [Display(Name ="区域")]
         [StringLength(50)]
         [Required]

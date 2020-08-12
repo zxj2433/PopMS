@@ -60,9 +60,16 @@
         </li>
 
         <li>
-          <span class="login-error">@Model.MSD.GetFirstError()</span>
-          <button type="submit" class="login-button" style="cursor:pointer">@Model.Localizer["Login.Login"]</button>
-          <wt:linkbutton window-title="@Model.Localizer["Login.Register"]" class="login-button" style="cursor:pointer" target="ButtonTargetEnum.Layer" window-width="500" window-height="500" url="/Login/Reg" text="@Model.Localizer["Login.Register"]" />
+            <span class="login-error">@Model.MSD.GetFirstError()</span>
+            <button type="submit" class="login-button" style="cursor:pointer">@Model.Localizer["Login.Login"]</button>
+            @*<wt:linkbutton window-title="@Model.Localizer["Login.Register"]" class="login-button" style="cursor:pointer" target="ButtonTargetEnum.Layer" window-width="500" window-height="500" url="/Login/Reg" text="@Model.Localizer["Login.Register"]" />*@
+
+            <div class="login-button">
+                <a href="~/files/操作流程手册.rar">下载培训手册</a>
+            </div>
+            <div class="login-button">
+                <a href="~/files/物料管理系统视频.mp4">下载培训视频</a>
+            </div>
         </li>
       </ul>
     </form>
@@ -72,3 +79,4 @@
 </body>
 
 </html>
+

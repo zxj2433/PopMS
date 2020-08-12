@@ -2,9 +2,16 @@
 @inject IStringLocalizer<WalkingTec.Mvvm.Core.Program> Localizer;
 
 <wt:form vm="@Model">
-<wt:row items-per-row="ItemsPerRowEnum.One">
+<wt:row items-per-row="ItemsPerRowEnum.Two">
+<wt:display field="Entity.Group.Name" />
+<wt:display field="Entity.PopIndex" />
+<wt:display field="Entity.OutID" />
 <wt:display field="Entity.PopName" />
 <wt:display field="Entity.index" />
+<wt:display field="Entity.Pack" />
+<wt:display field="Entity.Unit" />
+<wt:display field="Entity.Weight" />
+<wt:display field="Entity.ImageID" />
 </wt:row>
     <wt:row align="AlignEnum.Right">
         <wt:closebutton />

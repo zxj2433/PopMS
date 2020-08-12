@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using WalkingTec.Mvvm.Core;
 using WalkingTec.Mvvm.Core.Extensions;
 using PopMS.Model;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace PopMS.ViewModel.CTT.contract_popVMs
 {
@@ -26,7 +26,8 @@ namespace PopMS.ViewModel.CTT.contract_popVMs
             Pop_Excel.DataType = ColumnDataType.ComboBox;
             Pop_Excel.ListItems = DC.Set<pop>().GetSelectListItems(LoginUserInfo?.DataPrivileges, null, y => y.PopName);
             Contract_Excel.DataType = ColumnDataType.ComboBox;
-            Contract_Excel.ListItems = DC.Set<contract>().GetSelectListItems(LoginUserInfo?.DataPrivileges, null, y => y.Name);
+            Contract_Excel.ListItems = DC.Set<contract>().DPWhere(LoginUserInfo?.DataPrivileges,x=>x.DCID).Include("DC").GetSelectListItems(LoginUserInfo?.DataPrivileges, null, y => y.DC.Name + "-" + y.Name);
+
             FileDisplayName = "合同物料报价导入模板";
         }
 
@@ -34,6 +35,11 @@ namespace PopMS.ViewModel.CTT.contract_popVMs
 
     public class contract_popImportVM : BaseImportVM<contract_popTemplateVM, contract_pop>
     {
+        public override bool BatchSaveData()
+        {
+            
+            return base.BatchSaveData();
+        }
 
     }
 

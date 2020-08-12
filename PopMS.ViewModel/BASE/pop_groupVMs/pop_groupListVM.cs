@@ -31,7 +31,6 @@ namespace PopMS.ViewModel.BASE.pop_groupVMs
         protected override IEnumerable<IGridColumn<pop_group_View>> InitGridHeader()
         {
             return new List<GridColumn<pop_group_View>>{
-                this.MakeGridHeader(x => x.Name_view),
                 this.MakeGridHeader(x => x.Name),
                 this.MakeGridHeader(x => x.Index),
                 this.MakeGridHeaderAction(width: 200)
@@ -41,12 +40,9 @@ namespace PopMS.ViewModel.BASE.pop_groupVMs
         public override IOrderedQueryable<pop_group_View> GetSearchQuery()
         {
             var query = DC.Set<pop_group>()
-                .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.DCID)
-                .CheckEqual(Searcher.DCID, x=>x.DCID)
                 .Select(x => new pop_group_View
                 {
 				    ID = x.ID,
-                    Name_view = x.DC.Name,
                     Name = x.Name,
                     Index = x.Index,
                 })
@@ -57,8 +53,5 @@ namespace PopMS.ViewModel.BASE.pop_groupVMs
     }
 
     public class pop_group_View : pop_group{
-        [Display(Name = "仓库名")]
-        public String Name_view { get; set; }
-
     }
 }

@@ -55,11 +55,11 @@ namespace PopMS.ViewModel.ShipOrder.ship_popVMs
                 .Include("Pop.Group")
                 .CheckEqual(Searcher.Status, x => x.Status)
                 .CheckEqual(Searcher.Ship_Pop_SumID, x => x.Ship_Pop_SumID)
-                .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.Pop.Group.DCID)
+                .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.User.DCID)
                 .Select(x => new ship_pop_View
                 {
 				    ID = x.ID,
-                    DCName=x.Pop.Group.DC.Name,
+                    DCName=x.User.DC.Name,
                     CodeAndName_view = x.User.CodeAndName,
                     PopName_view = x.Pop.PopName,
                     OrderQty = x.OrderQty,
