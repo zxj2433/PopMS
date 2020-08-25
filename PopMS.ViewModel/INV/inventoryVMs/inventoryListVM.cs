@@ -22,7 +22,7 @@ namespace PopMS.ViewModel.INV.inventoryVMs
                 //this.MakeStandardAction("inventory", GridActionStandardTypesEnum.Delete, Localizer["Delete"], "INV",dialogWidth: 800),
                 //this.MakeStandardAction("inventory", GridActionStandardTypesEnum.Details, Localizer["Details"],"INV", dialogWidth: 800),
                 //this.MakeStandardAction("inventory", GridActionStandardTypesEnum.BatchEdit, Localizer["BatchEdit"],"INV", dialogWidth: 800),
-                //this.MakeStandardAction("inventory", GridActionStandardTypesEnum.BatchDelete, Localizer["BatchDelete"],"INV", dialogWidth: 800),
+                this.MakeStandardAction("inventory", GridActionStandardTypesEnum.BatchDelete, Localizer["BatchDelete"],"INV", dialogWidth: 800),
                 //this.MakeStandardAction("inventory", GridActionStandardTypesEnum.Import, Localizer["Import"],"INV", dialogWidth: 800),
                 this.MakeStandardAction("inventory", GridActionStandardTypesEnum.ExportExcel, Localizer["Export"],"INV"),
                 this.MakeAction("inv_record","Create","修改","库存操作",GridActionParameterTypesEnum.SingleId,"INV",dialogWidth:800).SetShowInRow(true).SetHideOnToolBar(true),
@@ -34,18 +34,18 @@ namespace PopMS.ViewModel.INV.inventoryVMs
         {
             return new List<GridColumn<inventory_View>>{
                 this.MakeGridHeader(x => x.DCName_VIew),
-                this.MakeGridHeader(x => x.Location_view),
-                this.MakeGridHeader(x => x.PopName),
+                this.MakeGridHeader(x => x.Location_view).SetSort(true),
+                this.MakeGridHeader(x => x.PopName).SetSort(true),
                 this.MakeGridHeader(x => x.Pack),
                 this.MakeGridHeader(x => x.Cnt),
                 this.MakeGridHeader(x => x.Price),
-                this.MakeGridHeader(x => x.Stock),
+                this.MakeGridHeader(x => x.Stock).SetSort(true).SetShowTotal(true),
                 //this.MakeGridHeader(x => x.TotalPrice),    
-                this.MakeGridHeader(x => x.EnableQty),
+                this.MakeGridHeader(x => x.EnableQty).SetShowTotal(true),
                 //this.MakeGridHeader(x => x.EnablePrice),
                 this.MakeGridHeader(x => x.PutUser),
-                this.MakeGridHeader(x => x.PutTime),
-                this.MakeGridHeader(x => x.OutDate),
+                this.MakeGridHeader(x => x.PutTime).SetSort(true),
+                this.MakeGridHeader(x => x.OutDate).SetSort(true),
                 this.MakeGridHeaderAction(width: 100)
             };
         }
@@ -55,6 +55,7 @@ namespace PopMS.ViewModel.INV.inventoryVMs
             var query = DC.Set<inventoryIn>()
                 .Include("Inv.Location.Area")
                 .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.Inv.Location.Area.DCID)
+                .CheckEqual(Searcher.DCID, x => x.Inv.Location.Area.DCID)
                 .CheckEqual(Searcher.LocationID, x => x.Inv.LocationID)
                 .CheckEqual(Searcher.PopID,x=>x.OrderPop.ContractPop.PopID)
                 .Select(x => new inventory_View
@@ -65,7 +66,7 @@ namespace PopMS.ViewModel.INV.inventoryVMs
                     PopName = x.OrderPop.ContractPop.Pop.PopName,
                     OutDate = x.Inv.InvOut.Max(r => r.CreateTime),
                     Stock = x.Inv.Stock,
-                    UsedQty = x.Inv.InvOut.Sum(r=>r.sp.AlcQty),
+                    UsedQty = x.Inv.InvOut.Sum(r=>r.OutQty),
                     PutUser = x.Inv.PutUser,
                     PutTime = x.Inv.PutTime,
                     Price=x.OrderPop.Price,

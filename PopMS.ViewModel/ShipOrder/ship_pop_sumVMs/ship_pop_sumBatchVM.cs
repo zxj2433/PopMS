@@ -30,9 +30,10 @@ namespace PopMS.ViewModel.ShipOrder.ship_pop_sumVMs
                 item.Inv.UsedQty -= item.OutQty;
                 DC.Set<ship_pop>().Update(item.sp);
                 DC.Set<inventory>().Update(item.Inv);
-                DC.Set<inventoryOut>().Remove(item);
-            }            
-            return base.DoBatchDelete();
+                DC.Set<inventoryOut>().Remove(item);                
+            }
+            DC.Set<ship_pop_sum>().RemoveRange(DC.Set<ship_pop_sum>().Where(r => Ids.Select(x => Guid.Parse(x)).ToList().Contains(r.ID)));
+            return DC.SaveChanges() > 0 ? true : false;
         }
     }
 

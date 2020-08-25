@@ -18,6 +18,9 @@ namespace PopMS.ViewModel.CTT.contract_popVMs
         public List<ComboSelectListItem> AllContracts { get; set; }
         [Display(Name = "合同")]
         public Guid? ContractID { get; set; }
+        public List<ComboSelectListItem> AllDCs { get; set; }
+        [Display(Name = "仓库")]
+        public Guid? DCID { get; set; }
 
         protected override void InitVM()
         {
@@ -25,6 +28,7 @@ namespace PopMS.ViewModel.CTT.contract_popVMs
             AllContracts = DC.Set<contract>()
                 .DPWhere(LoginUserInfo?.DataPrivileges, x => x.DCID).Include("DC")
                 .GetSelectListItems(LoginUserInfo?.DataPrivileges, null,y=>y.DC.Name+"-"+y.Name);
+            AllDCs = DC.Set<dc>().GetSelectListItems(LoginUserInfo?.DataPrivileges, null, x => x.Name);
         }
 
     }

@@ -27,8 +27,14 @@ namespace PopMS.ViewModel.ShipOrder.ship_popVMs
         public override void DoAdd()
         {
             Entity.UserID = LoginUserInfo.Id;
-            int UsedQty = DC.Set<inventoryOut>().Where(r => r.sp.PopID == Entity.PopID).Sum(r => r.sp.AlcQty);
-            int Stock = DC.Set<inventoryIn>().Where(r => r.OrderPop.ContractPop.PopID == Entity.PopID).Sum(r => r.Inv.Stock);
+            Entity.User = DC.Set<user>().Where(r => r.ID == LoginUserInfo.Id).FirstOrDefault();
+            int UsedQty = DC.Set<inventoryOut>()
+                .Where(r=>r.Inv.Location.Area.DCID==Entity.User.DCID)
+                .Where(r => r.sp.PopID == Entity.PopID).Sum(r => r.sp.AlcQty);
+            int Stock = DC.Set<inventoryIn>()
+                .Where(r=>r.Inv.Location.Area.DCID== Entity.User.DCID)
+                .Where(r => r.OrderPop.ContractPop.PopID == Entity.PopID)
+                .Sum(r => r.Inv.Stock);
             if((Stock-UsedQty)<Entity.OrderQty)
             {
                 MSD.AddModelError("OverQty", "最大货订量不可超过" + (Stock - UsedQty).ToString()+"个");

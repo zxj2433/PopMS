@@ -2,9 +2,13 @@
 @inject IStringLocalizer<WalkingTec.Mvvm.Core.Program> Localizer;
 
 <wt:searchpanel vm="@Model" reset-btn="true">
-<wt:row items-per-row="ItemsPerRowEnum.Three">
-<wt:combobox field="Searcher.Status" empty-text="@Localizer["All"]" />
-<wt:combobox field="Searcher.Ship_Pop_SumID" items="Searcher.AllShip_Pop_Sums" empty-text="@Localizer["All"]" />
-</wt:row>
+    <wt:row items-per-row="ItemsPerRowEnum.Three">
+        <wt:combobox field="Searcher.DCID" items="Searcher.AllDCs" empty-text="@Localizer["All"]" />
+        <wt:datetime field="Searcher.ShipDate" range="true" />
+        <wt:combobox field="Searcher.Status" empty-text="@Localizer["All"]" />
+        <wt:combobox field="Searcher.Ship_Pop_SumID" items="Searcher.AllShip_Pop_Sums" empty-text="@Localizer["All"]" />
+        <wt:combobox field="Searcher.PopID" items="Searcher.AllPops" empty-text="@Localizer["All"]" />
+
+    </wt:row>
 </wt:searchpanel>
 <wt:grid vm="@Model" url="/ShipOrder/ship_pop/Search"/>

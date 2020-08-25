@@ -20,7 +20,7 @@ namespace PopMS.Controllers
         public ActionResult Index()
         {
             var vm = CreateVM<ship_popListVM>();
-            vm.Searcher.Status = ShipStatus.NEW;
+            vm.Searcher.ShipDate = new DateRange(DateTime.Now.Date.AddDays(-10),DateTime.Now.Date);
             return PartialView(vm);
         }
 

@@ -3,6 +3,7 @@
 
 <wt:searchpanel vm="@Model" reset-btn="true">
     <wt:row items-per-row="ItemsPerRowEnum.Three">
+        <wt:combobox field="Searcher.DCID" items="Searcher.AllDCs" empty-text="@Localizer["All"]" />
         <wt:combobox field="Searcher.ContractID" items="Searcher.AllContracts" empty-text="@Localizer["All"]" />
         <wt:combobox field="Searcher.PopID" items="Searcher.AllPops" empty-text="@Localizer["All"]" />
     </wt:row>

@@ -24,13 +24,15 @@ namespace PopMS.ViewModel.ShipOrder.ship_pop_sumVMs
         public override void DoAdd()
         {           
             base.DoAdd();
-            var ShipPops = DC.Set<ship_pop>().Where(r => ShipPopIDs.Select(r => Guid.Parse(r)).Contains(r.ID)).ToList();
+            var ShipPops = DC.Set<ship_pop>().Include("User").Where(r => ShipPopIDs.Select(r => Guid.Parse(r)).Contains(r.ID)).ToList();
            
             foreach (var item in ShipPops)
             {
                 item.Status = ShipStatus.ING;
                 item.Ship_Pop_SumID = Entity.ID;
-                var Invs = DC.Set<inventoryIn>().Include("Inv").Where(r => r.OrderPop.ContractPop.PopID == item.PopID).Select(r=>r.Inv).ToList();
+                var Invs = DC.Set<inventoryIn>().Include("Inv")
+                    .Where(r=>r.Inv.Location.Area.DCID==item.User.DCID)
+                    .Where(r => r.OrderPop.ContractPop.PopID == item.PopID).Select(r=>r.Inv).ToList();
                 Invs = Invs.OrderBy(r => r.PutTime).ToList();
                 foreach (var inv in Invs)
                 {

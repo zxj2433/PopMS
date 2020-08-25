@@ -19,6 +19,7 @@ namespace PopMS.Controllers
         public ActionResult Index()
         {
             var vm = CreateVM<order_popListVM>();
+            vm.Searcher.OrderDate = new DateRange(DateTime.Now.AddMonths(-1), DateTime.Now.Date);
             return PartialView(vm);
         }
 
@@ -74,7 +75,7 @@ namespace PopMS.Controllers
                 }
                 else
                 {
-                    return FFResult().CloseDialog().RefreshGrid();
+                    return RedirectToAction("Index");
                 }
             }
         }

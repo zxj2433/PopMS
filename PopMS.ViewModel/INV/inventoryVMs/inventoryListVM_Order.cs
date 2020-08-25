@@ -31,7 +31,8 @@ namespace PopMS.ViewModel.INV.inventoryVMs
         protected override IEnumerable<IGridColumn<inventory_View>> InitGridHeader()
         {
             return new List<GridColumn<inventory_View>>{
-                this.MakeGridHeader(x => x.PopName),
+                this.MakeGridHeader(x => x.DCName_VIew),
+                this.MakeGridHeader(x => x.PopName).SetSort(true),
                 this.MakeGridHeader(x => x.Pack),
                 this.MakeGridHeader(x => x.Cnt),
                 this.MakeGridHeader(x => x.UsedQty),
@@ -47,15 +48,21 @@ namespace PopMS.ViewModel.INV.inventoryVMs
                 .Include("ContractPop.Pop")
                 .Include("ContractPop.Contract")
                 .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.ContractPop.Contract.DCID)
+                .CheckEqual(Searcher.DCID, x => x.ContractPop.Contract.DCID)
                 .CheckEqual(Searcher.GroupID, x => x.ContractPop.Pop.GroupID)
-                .GroupBy(x=> new { x.ContractPop.PopID, x.ContractPop.Pop.PopIndex, x.ContractPop.Pop.PopName, x.ContractPop.UnitPack, x.ContractPop.Cnt })
+                .GroupBy(x=> new { x.ContractPop.Contract.DC.Name, x.ContractPop.Contract.DCID, x.ContractPop.PopID, x.ContractPop.Pop.PopIndex, x.ContractPop.Pop.PopName, x.ContractPop.UnitPack, x.ContractPop.Cnt })
                 .Select(x => new inventory_View
                 {
                     ID = x.Key.PopID,
+                    DCName_VIew=x.Key.Name,
                     PopName = x.Key.PopName,
                     Stock = x.Sum(r=>r.RecQty),
-                    UsedQty =DC.Set<ship_pop>().Where(r=>r.PopID==x.Key.PopID).Sum(r=>r.AlcQty),
+                    UsedQty =DC.Set<ship_pop>()
+                    .Where(r=>r.PopID==x.Key.PopID)
+                    .Where(r=>r.User.DCID==x.Key.DCID)
+                    .Sum(r=>r.AlcQty),
                     OrderQty= DC.Set<ship_pop>().Where(r => r.PopID == x.Key.PopID)
+                    .Where(r => r.User.DCID == x.Key.DCID)
                     .Where(r=>r.User.DeptID==DC.Set<user>()
                     .Where(r=>r.ID==LoginUserInfo.Id).FirstOrDefault().DeptID)
                     .Where(r=>r.Status==ShipStatus.NEW)

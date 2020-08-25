@@ -32,12 +32,12 @@ namespace PopMS.ViewModel.ShipOrder.ship_pop_sumVMs
         {
             return new List<GridColumn<ship_pop_sum_View>>{
                 this.MakeGridHeader(x=>x.DCName),
-                this.MakeGridHeader(x => x.OrderDate),
+                this.MakeGridHeader(x => x.OrderDate).SetSort(true),
                 this.MakeGridHeader(x => x.OrderRemark),
                  this.MakeGridHeader(x => x.PopName),
-                this.MakeGridHeader(x => x.Location),
+                this.MakeGridHeader(x => x.Location).SetSort(true),
                  this.MakeGridHeader(x => x.PickQty),
-                this.MakeGridHeaderAction(width: 200)
+                this.MakeGridHeaderAction(width: 200).SetHide(true)
             };
         }
 
@@ -58,11 +58,14 @@ namespace PopMS.ViewModel.ShipOrder.ship_pop_sumVMs
             {
                 var query = DC.Set<inventoryOut>()
                     .Include("Inv.Location.Area")
+                    .Include("sp")
                     .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.Inv.Location.Area.DCID)
                         .CheckBetween(Searcher.OrderDate?.GetStartTime(), Searcher.OrderDate?.GetEndTime(), x => x.sp.Ship_Pop_Sum.OrderDate)
                         .CheckEqual(Searcher.Status, x => x.sp.Status)
+                        .CheckEqual(Searcher.DCID,x=>x.Inv.Location.Area.DCID)
+                        .CheckEqual(Searcher.PopID,x=>x.sp.PopID)
                         .GroupBy(x => new {
-                            x.sp.User.DC.Name,
+                            x.Inv.Location.Area.DC.Name,
                             x.sp.Ship_Pop_SumID,
                             x.sp.Ship_Pop_Sum.OrderDate,
                             x.sp.Ship_Pop_Sum.OrderRemark,

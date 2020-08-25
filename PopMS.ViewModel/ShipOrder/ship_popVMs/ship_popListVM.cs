@@ -38,12 +38,12 @@ namespace PopMS.ViewModel.ShipOrder.ship_popVMs
                 this.MakeGridHeader(x=>x.DCName),
                 this.MakeGridHeader(x=>x.DeptName),
                 this.MakeGridHeader(x => x.CodeAndName_view),
-                this.MakeGridHeader(x => x.PopName_view),
+                this.MakeGridHeader(x => x.PopName_view).SetSort(true),
                 this.MakeGridHeader(x => x.OrderQty),
                 this.MakeGridHeader(x => x.Status),
                 this.MakeGridHeader(x=>x.isNew).SetHide(true),
                 this.MakeGridHeader(x => x.ShipUser),
-                this.MakeGridHeader(x => x.ShipTime),
+                this.MakeGridHeader(x => x.ShipTime).SetSort(true),
                 this.MakeGridHeader(x => x.OrderRemark_view),
                 this.MakeGridHeaderAction(width: 200)
             };
@@ -53,9 +53,12 @@ namespace PopMS.ViewModel.ShipOrder.ship_popVMs
         {
             var query = DC.Set<ship_pop>()
                 .Include("Pop.Group")
+                .CheckBetween(Searcher.ShipDate?.GetStartTime(),Searcher.ShipDate?.GetEndTime(),x=>x.CreateTime)
                 .CheckEqual(Searcher.Status, x => x.Status)
                 .CheckEqual(Searcher.Ship_Pop_SumID, x => x.Ship_Pop_SumID)
                 .DPWhere(LoginUserInfo?.DataPrivileges,x=>x.User.DCID)
+                .CheckEqual(Searcher.DCID,x=>x.User.DCID)
+                .CheckEqual(Searcher.PopID,x=>x.PopID)
                 .Select(x => new ship_pop_View
                 {
 				    ID = x.ID,
@@ -94,6 +97,7 @@ namespace PopMS.ViewModel.ShipOrder.ship_popVMs
         }
         [Display(Name ="部门")]
         public string DeptName { get; set; }
+        public Guid? DCID { get; set; }
         [Display(Name ="仓库")]
         public string DCName { get; set; }
     }

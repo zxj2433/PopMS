@@ -34,13 +34,13 @@ namespace PopMS.ViewModel.Orders.order_popVMs
             return new List<GridColumn<order_pop_View>>{
                 this.MakeGridHeader(x=>x.DCName),
                 this.MakeGridHeader(x => x.ContractName),
-                this.MakeGridHeader(x => x.PopName),
+                this.MakeGridHeader(x => x.PopName).SetSort(true),
                 this.MakeGridHeader(x=>x.UnitPack),
                 this.MakeGridHeader(x => x.CreateBy),
-                this.MakeGridHeader(x => x.CreateTime),
+                this.MakeGridHeader(x => x.CreateTime).SetSort(true),
                 this.MakeGridHeader(x => x.Status),
-                this.MakeGridHeader(x => x.OrderQty),
-                this.MakeGridHeader(x => x.RecQty),
+                this.MakeGridHeader(x => x.OrderQty).SetShowTotal(true),
+                this.MakeGridHeader(x => x.RecQty).SetShowTotal(true),
                 this.MakeGridHeaderAction(width: 150)
             };
         }
@@ -53,6 +53,8 @@ namespace PopMS.ViewModel.Orders.order_popVMs
                 .CheckBetween(Searcher.OrderDate?.GetStartTime(),Searcher.OrderDate?.GetEndTime(),x=>x.CreateTime)
                 .CheckEqual(Searcher.ContractID,x=>x.ContractPop.ContractID)
                 .CheckEqual(Searcher.Status,x=>x.Status)
+                .CheckEqual(Searcher.DCID,x=>x.ContractPop.Contract.DCID)
+                .CheckEqual(Searcher.PopID,x=>x.ContractPop.PopID)
                 .Select(x => new order_pop_View
                 {
 				    ID = x.ID,
@@ -72,7 +74,6 @@ namespace PopMS.ViewModel.Orders.order_popVMs
                 .OrderByDescending(x => x.CreateTime);
             return query;
         }
-
     }
 
     public class order_pop_View : order_pop{
@@ -84,21 +85,21 @@ namespace PopMS.ViewModel.Orders.order_popVMs
         public double UnitCost { get; set; }
         [Display(Name ="单位")]
         public string UnitPack { get; set; }
-        [Display(Name = "总金额")]
-        public double TotalCost {
-            get
-            {
-                return UnitCost * OrderQty;
-            }
-        }
-        [Display(Name = "总金额")]
-        public double RecCost
-        {
-            get
-            {
-                return UnitCost * RecQty;
-            }
-        }
+        //[Display(Name = "总金额")]
+        //public double TotalCost {
+        //    get
+        //    {
+        //        return UnitCost * OrderQty;
+        //    }
+        //}
+        //[Display(Name = "收货金额")]
+        //public double RecCost
+        //{
+        //    get
+        //    {
+        //        return UnitCost * RecQty;
+        //    }
+        //}
         [Display(Name ="仓库")]
         public string DCName { get; set; }
 

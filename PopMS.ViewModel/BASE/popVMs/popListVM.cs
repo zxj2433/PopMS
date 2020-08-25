@@ -7,7 +7,7 @@ using WalkingTec.Mvvm.Core.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using PopMS.Model;
-
+using System.Drawing;
 
 namespace PopMS.ViewModel.BASE.popVMs
 {
@@ -47,8 +47,9 @@ namespace PopMS.ViewModel.BASE.popVMs
         {
             return new List<ColumnFormatInfo>
             {
-                ColumnFormatInfo.MakeDownloadButton(ButtonTypesEnum.Button,entity.ImageID),
-                ColumnFormatInfo.MakeViewButton(ButtonTypesEnum.Button,entity.ImageID,640,480),
+                //ColumnFormatInfo.MakeHtml("<image src="+entity.Image.Path+" />")
+                //ColumnFormatInfo.MakeDownloadButton(ButtonTypesEnum.Button,entity.ImageID),
+                ColumnFormatInfo.MakeViewButton(ButtonTypesEnum.Button,entity.ImageID),
             };
         }
 

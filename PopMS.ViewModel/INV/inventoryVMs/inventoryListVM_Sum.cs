@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using PopMS.Model;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Internal;
+using PopMS.ViewModel.ShipOrder.ship_popVMs;
 
 namespace PopMS.ViewModel.INV.inventoryVMs
 {
@@ -34,13 +35,13 @@ namespace PopMS.ViewModel.INV.inventoryVMs
         protected override IEnumerable<IGridColumn<inventory_View>> InitGridHeader()
         {
             return new List<GridColumn<inventory_View>>{
-                this.MakeGridHeader(x => x.PopName),
+                this.MakeGridHeader(x => x.PopName).SetSort(true),
                 this.MakeGridHeader(x => x.OrderQty),
                 this.MakeGridHeader(x => x.UsedQty),
                 this.MakeGridHeader(x => x.OnHandQty),
                 this.MakeGridHeader(x => x.EnableQty),
-                this.MakeGridHeader(x => x.InDate),
-                this.MakeGridHeader(x => x.OutDate),
+                this.MakeGridHeader(x => x.InDate).SetSort(true),
+                this.MakeGridHeader(x => x.OutDate).SetSort(true),
                 this.MakeGridHeaderAction(width: 200).SetHide(true)
             };
         }
@@ -55,6 +56,7 @@ namespace PopMS.ViewModel.INV.inventoryVMs
                         .DPWhere(LoginUserInfo?.DataPrivileges, x => x.ContractPop.Contract.DCID)
                         .CheckBetween(Searcher.InvDate?.GetStartTime(), Searcher.InvDate?.GetEndTime(), x => x.CreateTime)
                         .CheckEqual(Searcher.PopID, x => x.ContractPop.PopID)
+                        .CheckEqual(Searcher.DCID, x => x.ContractPop.Contract.DCID)
                         .GroupBy(x => x.ContractPop.PopID)
                         .Select(x => new order_pop
                         {
@@ -69,14 +71,15 @@ namespace PopMS.ViewModel.INV.inventoryVMs
                         .DPWhere(LoginUserInfo?.DataPrivileges, x => x.User.DCID)
                         .CheckBetween(Searcher.InvDate?.GetStartTime(), Searcher.InvDate?.GetEndTime(), x => x.CreateTime)
                         .CheckEqual(Searcher.PopID, x => x.PopID)
-                        .GroupBy(x => x.PopID)
-                        .Select(x => new ship_pop
+                        .CheckEqual(Searcher.DCID,x=>x.User.DCID)
+                        .GroupBy(x =>x.PopID)
+                        .Select(x => new ship_pop_View
                         {
                             PopID = x.Key,
                             AlcQty = x.Sum(x => x.AlcQty),
                             CreateTime = x.Max(x => x.CreateTime)
                         })
-                        on x.ID equals O.PopID into OUTs
+                        on x.ID equals O.PopID  into OUTs
                         from OUT in OUTs.DefaultIfEmpty()
                         select new inventory_View
                         {
